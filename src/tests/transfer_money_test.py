@@ -8,6 +8,15 @@ class TestTransferMoney():
     # Дефолтный позитивный (между своими счетами)
     def test_transfer_money(self, api_manager: ApiManager, user_with_two_accounts: UserTwoAccounts, amount=300):
         api_manager.user_steps.transfer_between_your_accounts(user_with_two_accounts, amount)
+        response = api_manager.user_steps.get_transactions_between_your_accounts(user_with_two_accounts)
+
+        for transaction in response:
+            if transaction.type == 'TRANSFER_OUT':
+                assert transaction.relatedAccountId == user_with_two_accounts.to_account_id
+            elif transaction.type == 'DEPOSIT':
+                assert transaction.relatedAccountId == user_with_two_accounts.from_account_id
+            else:
+                raise AssertionError(f"Unexpected transaction type: {transaction.type}")
 
     @pytest.mark.parametrize(
         argnames= 'amount, expected_status',
@@ -18,7 +27,13 @@ class TestTransferMoney():
         ]
     )
     def test_invalid_transfer_money(self, api_manager: ApiManager, amount, expected_status, user_with_two_accounts: UserTwoAccounts):
-     api_manager.user_steps.transfer_between_invalid_your_accounts(user_with_two_accounts, amount, expected_status)
+
+        api_manager.user_steps.transfer_between_invalid_your_accounts(user_with_two_accounts, amount, expected_status)
+        response = api_manager.user_steps.get_transactions_between_your_accounts(user_with_two_accounts)
+        for transaction in response:
+            if transaction.type == 'TRANSFER_OUT':
+                assert transaction.amount < 0
+
 
     def test_transfer_money_different_users(self, api_manager: ApiManager, user_with_two_accounts: UserTwoAccounts, amount=911):
         api_manager.user_steps.transfer_between_your_accounts(user_with_two_accounts, amount)

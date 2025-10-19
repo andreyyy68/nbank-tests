@@ -1,3 +1,4 @@
+from src.main.api.fixtures.user_fixtures import user_account
 from src.main.api.generators.random_model_generator import RandomModelGenerator
 from src.main.api.models.change_username import ChangeUsernameModel
 from src.main.api.models.comparison.model_assertions import ModelAssertions
@@ -6,6 +7,7 @@ from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.deposit_request import DepositRequestModel
 from src.main.api.models.login_user_request import LoginUserRequest
 from src.main.api.models.transfer_money_model import TransferMoneyRequest
+from src.main.api.models.user_account import UserAccount
 from src.main.api.models.user_two_accounts import UserTwoAccounts
 from src.main.api.requests.skeleton.requesters.crud_requester import CrudRequester
 from src.main.api.requests.skeleton.requesters.validated_crud_requester import ValidatedCrudRequester
@@ -46,7 +48,7 @@ class UserSteps(BaseSteps):
 
     def change_username(self, user_request: CreateUserRequest):
         change_user_request = RandomModelGenerator.generate(ChangeUsernameModel)
-        change_username_response = ValidatedCrudRequester(
+        ValidatedCrudRequester(
             RequestSpec.user_auth_spec(username=user_request.username, password=user_request.password),
             Endpoint.CHANGE_USERNAME,
             ResponseSpec.request_returns_ok()
@@ -114,6 +116,55 @@ class UserSteps(BaseSteps):
             ResponseSpec.response_expected_status(expected_status)
         ).post(request)
         ModelAssertions(request, request).match()
+
+    def get_transactions(self, user_account: UserAccount):
+        response = ValidatedCrudRequester(
+            RequestSpec.user_auth_spec(username=user_account.user.username, password=user_account.user.password),
+            Endpoint.GET_TRANSACTIONS,
+            ResponseSpec.request_returns_ok()
+        ).get(accountId=user_account.account_id)
+
+        return response
+
+    def get_transactions_between_your_accounts(self, user_with_two_accounts: UserTwoAccounts):
+        response = ValidatedCrudRequester(
+            RequestSpec.user_auth_spec(username=user_with_two_accounts.user.username, password=user_with_two_accounts.user.password),
+            Endpoint.GET_TRANSACTIONS,
+            ResponseSpec.request_returns_ok()
+        ).get(accountId=user_with_two_accounts.from_account_id)
+
+        return response
+
+    def get_account(self, user_account: UserAccount):
+        response = ValidatedCrudRequester(
+            RequestSpec.user_auth_spec(username=user_account.user.username, password=user_account.user.password),
+            Endpoint.GET_ACCOUNT,
+            ResponseSpec.request_returns_ok()
+        ).get()
+        account = next(acc for acc in response if acc.id == user_account.account_id)
+
+        return account
+
+    def get_profile(self, user_request: CreateUserRequest):
+        response = ValidatedCrudRequester(
+            RequestSpec.user_auth_spec(username=user_request.username, password=user_request.password),
+            Endpoint.GET_PROFILE,
+            ResponseSpec.request_returns_ok()
+        ).get()
+
+        return response.root
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

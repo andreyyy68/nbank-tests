@@ -13,8 +13,15 @@ class TestDepositMoneyUser:
     )
     def test_valid_deposit_user(self, api_manager: ApiManager, user_account, balance):
         api_manager.user_steps.deposit_user(user_account, balance)
+        response = api_manager.user_steps.get_transactions(user_account)
 
-    # Тест возвращает 200 при депозите в 10.000 (баг)
+        for transaction in response:
+            assert transaction.relatedAccountId == user_account.account_id
+            assert transaction.amount > 0
+            assert transaction.type == "DEPOSIT"
+
+
+        # Тест возвращает 200 при депозите в 10.000 (баг)
     @pytest.mark.parametrize(
         argnames= 'balance, expected_status',
         argvalues= [
@@ -25,6 +32,10 @@ class TestDepositMoneyUser:
     @pytest.mark.debug
     def test_invalid_deposit_user(self, api_manager: ApiManager, user_account, balance, expected_status):
         api_manager.user_steps.invalid_deposit_user(user_account, balance, expected_status)
+        response = api_manager.user_steps.get_transactions(user_account)
+
+        for transaction in response:
+            assert transaction.amount < 0
 
         # Проверка депозита на не сущ. аккаунт
     def test_invalid_account_user(self, api_manager: ApiManager, user_request):

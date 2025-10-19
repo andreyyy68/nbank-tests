@@ -35,6 +35,21 @@ class AdminSteps(BaseSteps):
         #     ResponseSpec.entity_was_deleted()
         # ).delete(user_id)
 
+    def get_user(self, username: str):
+        response = ValidatedCrudRequester(
+            RequestSpec.admin_auth_spec(),
+            Endpoint.GET_USER,
+            ResponseSpec.request_returns_ok()
+        ).get()
+
+        user = next((u for u in response if u.username == username), None)
+        if user is None:
+            raise ValueError(f"User with username {username} not found")
+        return user
+
+
+
+
 
 
 
