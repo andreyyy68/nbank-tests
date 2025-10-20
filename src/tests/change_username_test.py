@@ -12,8 +12,6 @@ class TestChangeUsername:
 
         assert response.username == user_request.username
 
-
-
     # Баг с изменением имени / 200 -> 404 / 400
     # Требования: Два слова, состоящее из букв, разделенные пробелом
     @pytest.mark.parametrize(

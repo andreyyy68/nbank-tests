@@ -6,6 +6,7 @@ from src.main.api.models.create_account_response import CreateAccountResponse
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.api.models.deposit_request import DepositRequestModel
 from src.main.api.models.login_user_request import LoginUserRequest
+from src.main.api.models.transaction_type import TransactionType
 from src.main.api.models.transfer_money_model import TransferMoneyRequest
 from src.main.api.models.user_account import UserAccount
 from src.main.api.models.user_two_accounts import UserTwoAccounts
@@ -133,7 +134,10 @@ class UserSteps(BaseSteps):
             ResponseSpec.request_returns_ok()
         ).get(accountId=user_with_two_accounts.from_account_id)
 
-        return response
+        transactions = [
+            transaction for transaction in response if transaction.type == TransactionType.TRANSFER.value
+        ]
+        return transactions
 
     def get_account(self, user_account: UserAccount):
         response = ValidatedCrudRequester(

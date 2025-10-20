@@ -1,5 +1,7 @@
 import pytest
 from src.main.api.classes.api_manager import ApiManager
+from src.main.api.models.transaction_type import TransactionType
+
 
 
 
@@ -18,7 +20,7 @@ class TestDepositMoneyUser:
         for transaction in response:
             assert transaction.relatedAccountId == user_account.account_id
             assert transaction.amount > 0
-            assert transaction.type == "DEPOSIT"
+            assert transaction.type == TransactionType.DEPOSIT.value
 
 
         # Тест возвращает 200 при депозите в 10.000 (баг)
