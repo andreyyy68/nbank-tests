@@ -2,18 +2,19 @@ from src.main.api.models.base_model import BaseModel
 from dataclasses import dataclass
 from typing import Type
 from enum import Enum
-
 from src.main.api.models.change_username import ChangeUsernameModel
-from src.main.api.models.change_username_response import ChangeUsernameResponse
-from src.main.api.models.create_account_response import CreateAccountResponse
+from src.main.api.models.change_username_response import ChangeUsernameResponse, CustomerResponseModel
+from src.main.api.models.create_account_response import CreateAccountResponse, AccountResponseModel
 from src.main.api.models.create_user_request import CreateUserRequest
-from src.main.api.models.create_user_response import CreateUserResponse
+from src.main.api.models.create_user_response import CreateUserResponse, UserResponseModel
 from src.main.api.models.deposit_request import DepositRequestModel
 from src.main.api.models.deposit_response import DepositResponseModel
 from src.main.api.models.login_user_request import LoginUserRequest
 from src.main.api.models.login_user_response import LoginUserResponse
+from src.main.api.models.transactions_model import TransactionsResponse
 from src.main.api.models.transfer_money_model import TransferMoneyRequest
 from src.main.api.models.transfer_money_response import TransferMoneyResponse
+
 
 
 @dataclass(frozen=True)
@@ -63,5 +64,29 @@ class Endpoint(Enum):
         url = '/accounts/transfer',
         request_model=TransferMoneyRequest,
         response_model=TransferMoneyResponse
+    )
+
+    GET_TRANSACTIONS = EndpointConfig(
+        url = '/accounts/{accountId}/transactions',
+        request_model = None,
+        response_model = TransactionsResponse
+    )
+
+    GET_USER = EndpointConfig(
+        url = '/admin/users',
+        request_model = None,
+        response_model=UserResponseModel
+    )
+
+    GET_ACCOUNT = EndpointConfig(
+        url = '/customer/accounts',
+        request_model = None,
+        response_model=AccountResponseModel
+    )
+
+    GET_PROFILE = EndpointConfig(
+        url = '/customer/profile',
+        request_model = None,
+        response_model = CustomerResponseModel
     )
 

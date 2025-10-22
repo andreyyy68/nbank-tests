@@ -13,6 +13,11 @@ class TestCreateUser:
     )
     def test_create_valid_user(self, api_manager: ApiManager, create_user_request: CreateUserRequest):
         api_manager.admin_steps.create_user(user_request=create_user_request)
+        response = api_manager.admin_steps.get_user(create_user_request.username)
+
+        assert response.username == create_user_request.username
+        assert response.role == create_user_request.role
+
 
         # Проблема при удалении
         # AdminUserRequester(
