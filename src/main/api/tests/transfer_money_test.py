@@ -1,4 +1,4 @@
-from src.main.api.classes.api_manager import ApiManager
+from src.main.classes.api_manager import ApiManager
 from src.main.api.models.user_two_accounts import UserTwoAccounts
 import pytest
 
@@ -7,7 +7,7 @@ import pytest
 class TestTransferMoney():
     # Дефолтный позитивный (между своими счетами)
     def test_transfer_money(self, api_manager: ApiManager, user_with_two_accounts: UserTwoAccounts, amount=300):
-        api_manager.user_steps.transfer_between_your_accounts(user_with_two_accounts, amount)
+        api_manager.user_steps.set_user(user_with_two_accounts.user).transfer_between_your_accounts(user_with_two_accounts, amount)
         response = api_manager.user_steps.get_transactions_between_your_accounts(user_with_two_accounts)
 
         for transaction in response:

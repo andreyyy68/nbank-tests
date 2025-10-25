@@ -1,5 +1,5 @@
 from typing import List, Any
-from src.main.api.fixtures.user_fixtures import *
+from src.main.fixtures.user_fixtures import *
 
 
 @pytest.fixture

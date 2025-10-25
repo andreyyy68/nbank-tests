@@ -1,4 +1,4 @@
-from src.main.api.fixtures.user_fixtures import user_account
+from src.main.fixtures.user_fixtures import user_account
 from src.main.api.generators.random_model_generator import RandomModelGenerator
 from src.main.api.models.change_username import ChangeUsernameModel
 from src.main.api.models.comparison.model_assertions import ModelAssertions
@@ -16,13 +16,30 @@ from src.main.api.specs.request_specs import RequestSpec
 from src.main.api.specs.response_specs import ResponseSpec
 from src.main.api.steps.base_steps import BaseSteps
 from src.main.api.requests.skeleton.endpoint import Endpoint
-from typing import Optional
+from typing import Optional, List, Any
 
 
 
 class UserSteps(BaseSteps):
-    def login(self, user_request: CreateUserRequest):
-        login_user_request = LoginUserRequest(username=user_request.username, password=user_request.password)
+
+    def __init__(self, created_object: List[Any]):
+        super().__init__(created_object)
+        self.user = None
+
+    def set_user(self, user: CreateUserRequest):
+        self.user = user
+        return self
+
+    @staticmethod
+    def _user_must_be_set(func):
+        def wrapper(self, *args, **kwargs):
+            assert self.user is not None, "User must be set before calling this step"
+            return func(self, *args, **kwargs)
+
+        return wrapper
+
+    def login(self):
+        login_user_request = LoginUserRequest(username=self.user.username, password=self.user.password)
         login_response = ValidatedCrudRequester(
             RequestSpec.user_auth_spec(login_user_request.username, login_user_request.password),
             Endpoint.USER_AUTH,
@@ -35,10 +52,10 @@ class UserSteps(BaseSteps):
 
         return login_response
 
-    def create_account(self, user_request: CreateUserRequest) -> CreateAccountResponse:
-        LoginUserRequest(username=user_request.username, password=user_request.password)
+    def create_account(self) -> CreateAccountResponse:
+        LoginUserRequest(username=self.user.username, password=self.user.password)
         create_account_response = ValidatedCrudRequester(
-            RequestSpec.user_auth_spec(username=user_request.username, password=user_request.password),
+            RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
             Endpoint.CREATE_ACCOUNT,
             ResponseSpec.entity_was_created()
         ).post()
@@ -47,47 +64,47 @@ class UserSteps(BaseSteps):
         assert not create_account_response.transactions
         return create_account_response
 
-    def change_username(self, user_request: CreateUserRequest):
+    def change_username(self):
         change_user_request = RandomModelGenerator.generate(ChangeUsernameModel)
         ValidatedCrudRequester(
-            RequestSpec.user_auth_spec(username=user_request.username, password=user_request.password),
+            RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
             Endpoint.CHANGE_USERNAME,
             ResponseSpec.request_returns_ok()
         ).update(change_user_request)
 
 
-    def change_invalid_username(self, invalud_user_request: ChangeUsernameModel, user_request: CreateUserRequest):
+    def change_invalid_username(self, invalud_user_request: ChangeUsernameModel):
         ValidatedCrudRequester(
-            RequestSpec.user_auth_spec(username=user_request.username, password=user_request.password),
+            RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
             Endpoint.CHANGE_USERNAME,
             ResponseSpec.request_returns_ok()
         ).update(invalud_user_request)
 
-    def deposit_user(self, user_account, request_balance: Optional[int] = None):
-        request = DepositRequestModel(id=user_account.account_id, balance=request_balance)
+    def deposit_user(self, user_account_id, request_balance: Optional[int] = None):
+        request = DepositRequestModel(id=user_account_id, balance=request_balance)
         response = ValidatedCrudRequester(
-            RequestSpec.user_auth_spec(username=user_account.user.username, password=user_account.user.password),
+            RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
             Endpoint.USER_DEPOSIT,
             ResponseSpec.request_returns_ok()
         ).post(request)
 
         ModelAssertions(request, response).match()
 
-    def invalid_deposit_user(self, user_account, request_balance: int | float, expected_status):
-        request = DepositRequestModel(id=user_account.account_id, balance=request_balance)
+    def invalid_deposit_user(self, user_account_id, request_balance: int | float, expected_status):
+        request = DepositRequestModel(id=user_account_id, balance=request_balance)
         CrudRequester(
-            RequestSpec.user_auth_spec(username=user_account.user.username, password=user_account.user.password),
+            RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
             Endpoint.USER_DEPOSIT,
             ResponseSpec.response_expected_status(expected_status)
         ).post(request)
 
-    def deposit_ivalid_id_user(self, user_request, request_balance: int):
+    def deposit_ivalid_id_user(self, request_balance: int):
         request = DepositRequestModel(
             id=4444,
             balance=request_balance
         )
         CrudRequester(
-            RequestSpec.user_auth_spec(username=user_request.username, password=user_request.password),
+            RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
             Endpoint.USER_DEPOSIT,
             ResponseSpec.forbidden()
         ).post(request)
@@ -118,12 +135,12 @@ class UserSteps(BaseSteps):
         ).post(request)
         ModelAssertions(request, request).match()
 
-    def get_transactions(self, user_account: UserAccount):
+    def get_transactions(self, account_id):
         response = ValidatedCrudRequester(
-            RequestSpec.user_auth_spec(username=user_account.user.username, password=user_account.user.password),
+            RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
             Endpoint.GET_TRANSACTIONS,
             ResponseSpec.request_returns_ok()
-        ).get(accountId=user_account.account_id)
+        ).get(accountId=account_id)
 
         return response
 
@@ -141,7 +158,7 @@ class UserSteps(BaseSteps):
 
     def get_account(self, user_account: UserAccount):
         response = ValidatedCrudRequester(
-            RequestSpec.user_auth_spec(username=user_account.user.username, password=user_account.user.password),
+            RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
             Endpoint.GET_ACCOUNT,
             ResponseSpec.request_returns_ok()
         ).get()
@@ -149,14 +166,48 @@ class UserSteps(BaseSteps):
 
         return account
 
-    def get_profile(self, user_request: CreateUserRequest):
+    def get_profile(self):
         response = ValidatedCrudRequester(
-            RequestSpec.user_auth_spec(username=user_request.username, password=user_request.password),
+            RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
             Endpoint.GET_PROFILE,
             ResponseSpec.request_returns_ok()
         ).get()
 
         return response.root
+
+    def get_auth_token(self):
+        login_request = LoginUserRequest(username=self.user.username, password=self.user.password)
+        response = CrudRequester(
+            RequestSpec.unauth_spec(),
+            Endpoint.USER_AUTH,
+            ResponseSpec.request_returns_ok()
+        ).post(login_request)
+
+        return response.headers.get('Authorization')
+
+    def get_account_number(self, account_number):
+        response = ValidatedCrudRequester(
+            RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
+            Endpoint.GET_ACCOUNT,
+            ResponseSpec.request_returns_ok()
+        ).get()
+
+        account = next(acc for acc in response if acc.accountNumber == account_number)
+        return account
+
+    def get_changed_username(self, name):
+        response = ValidatedCrudRequester(
+            RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
+            Endpoint.GET_PROFILE,
+            ResponseSpec.request_returns_ok()
+        ).get()
+
+        return response.root.name
+
+
+
+
+
 
 
 
