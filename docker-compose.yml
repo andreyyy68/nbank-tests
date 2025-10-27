@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  grid:
+    image: mcr.microsoft.com/playwright/grid:latest
+    container_name: playwright-grid
+    ports:
+      - "3000:3000"  # веб-интерфейс
+      - "4444:4444"  # WebSocket для тестов
+    environment:
+      PLAYWRIGHT_GRID_MAX_CONCURRENCY: 5

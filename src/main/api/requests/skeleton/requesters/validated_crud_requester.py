@@ -3,7 +3,7 @@ from pydantic import RootModel
 from src.main.api.models.base_model import BaseModel
 from src.main.api.requests.skeleton.http_request import HttpRequest
 from src.main.api.requests.skeleton.requesters.crud_requester import CrudRequester
-import requests
+
 
 T = TypeVar('T', bound=BaseModel | RootModel)
 class ValidatedCrudRequester(HttpRequest):
