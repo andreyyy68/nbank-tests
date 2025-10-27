@@ -20,7 +20,6 @@ class EditProfilePage(BasePage):
             self.button_save_changes.click()
         return self
 
-
     def button_expecting_error(self, message):
        self._handle_alert_before_click(message=message, button_locator=self.button_save_changes)
        return self

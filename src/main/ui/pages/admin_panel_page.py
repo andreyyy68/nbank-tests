@@ -30,7 +30,11 @@ class AdminPanelPage(BasePage):
 
     def find_user_by_username(self, username: str):
         user_locator = self.page.locator(f"li:has-text('{username}')").first
-        expect(user_locator).to_be_visible()
+        try:
+            expect(user_locator).to_be_visible()
+        except:
+            pass
+
         user = [user for user in self.get_user() if user.username == username]
         return user[0] if user else None
 

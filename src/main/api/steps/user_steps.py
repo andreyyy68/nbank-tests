@@ -195,7 +195,7 @@ class UserSteps(BaseSteps):
         account = next(acc for acc in response if acc.accountNumber == account_number)
         return account
 
-    def get_changed_username(self, name):
+    def get_changed_username(self):
         response = ValidatedCrudRequester(
             RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
             Endpoint.GET_PROFILE,

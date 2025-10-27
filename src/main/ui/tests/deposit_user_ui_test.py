@@ -25,7 +25,9 @@ class TestDepositUser:
     @pytest.mark.parametrize(
         argnames="amount, message",
         argvalues=[(0, AlertMessage.DEPOSIT_ACCOUNT_FAILED),
-                   (-1, AlertMessage.DEPOSIT_ACCOUNT_FAILED),]
+                   (-1, AlertMessage.DEPOSIT_ACCOUNT_FAILED),
+                   (5001, AlertMessage.DEPOSIT_MORE_MAX),
+                   ]
     )
     def test_invalid_deposit_user(self, api_manager, user_page, user_account, amount, message):
         (DepositPage(user_page).open().
@@ -36,11 +38,3 @@ class TestDepositUser:
         deposit = api_manager.user_steps.get_transactions(user_account.account_id)
         for deposit_user in deposit:
             assert deposit_user.amount < 0, "The balance was replenished on BE"
-
-
-
-
-
-
-
-

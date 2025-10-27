@@ -48,10 +48,9 @@ class BasePage(ABC):
             assert expected_message in self.current_alert_message, f"Incorrect error message: {self.current_alert_message}"
             dialog.value.accept()
 
-    def get_profile_name(self, name: str):
+    def get_profile_name(self):
         self.page.reload()
-        actual_name = self.profile_name.text_content()
-        assert actual_name == name, f"Incorrect profile name: {self.profile_name}"
+        return self.profile_name.text_content()
 
     def check_redirect_to(self, expected_url: str):
         self.page.wait_for_url(expected_url)

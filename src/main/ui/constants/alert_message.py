@@ -9,4 +9,7 @@ class AlertMessage:
     TRANSFER_VALID = "Successfully transferred"
     TRANSFER_FAILED = "Error: Invalid transfer: insufficient funds or invalid accounts"
     NOT_CHECK_CONFIRM = "Please fill all fields and confirm"
+    DEPOSIT_MORE_MAX = "Please deposit less or equal to 5000$"
+    TRANSFER_MORE_MAX = "Error: Transfer amount cannot exceed 10000"
+    TRANSFER_BELOW_MIN = "Error: Transfer amount must be at least 0.01"
 

@@ -29,14 +29,13 @@ def user_with_two_accounts(api_manager, user_request) -> UserTwoAccounts:
 
     api_manager.user_steps.deposit_user(
         from_account.id,
-        5555
+        5000
     )
 
     return UserTwoAccounts(
         user=user_request,
         from_account_id=from_account.id,
         to_account_id=to_account.id,
-        balance=15,
     )
 
 @pytest.fixture
