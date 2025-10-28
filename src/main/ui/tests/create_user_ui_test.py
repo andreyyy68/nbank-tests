@@ -8,13 +8,13 @@ from src.main.ui.constants.alert_message import AlertMessage
 
 @pytest.mark.ui
 class TestCreateUser:
-    def test_admin_can_create_user(self, api_manager, admin_page):
-        user_data = RandomModelGenerator.generate(CreateUserRequest)
+    @pytest.mark.parametrize("create_user_request", [RandomModelGenerator.generate(CreateUserRequest)])
+    def test_admin_can_create_user(self, api_manager, admin_page, create_user_request):
         (AdminPanelPage(admin_page).open().
-         create_user(username=user_data.username, password=user_data.password, message=AlertMessage.USER_CREATED).
-         find_user_by_request(user_data))
+         create_user(username=create_user_request.username, password=create_user_request.password, message=AlertMessage.USER_CREATED).
+         find_user_by_request(create_user_request))
 
-        user = api_manager.admin_steps.get_user(user_data.username)
+        user = api_manager.admin_steps.get_user(create_user_request.username)
         assert user, "User was not created on BE"
         api_manager.admin_steps.add_created_object(user)
 
@@ -28,8 +28,3 @@ class TestCreateUser:
 
         user = api_manager.admin_steps.get_user(user_data.username)
         assert not user, "User was created on BE"
-
-
-
-
-

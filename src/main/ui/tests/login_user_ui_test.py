@@ -19,8 +19,3 @@ class TestLoginUser:
         user_dashboard.welcome_text.wait_for(state="visible")
         user_dashboard.create_account_button.wait_for(state="visible")
         assert user_dashboard.welcome_text.text_content() == DefaultValues.WELCOME_NONAME
-
-
-
-
-

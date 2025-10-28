@@ -33,5 +33,3 @@ class TestChangeUsername:
 
         current_username = api_manager.user_steps.get_changed_username()
         assert not current_username, "The name has changed on BE"
-
-

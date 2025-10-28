@@ -45,6 +45,3 @@ class TestTransfer:
     def test_not_confirm(self, user_page):
         (TransferPage(user_page).open().
         transfer_expected_error(AlertMessage.NOT_CHECK_CONFIRM))
-
-
-
