@@ -4,3 +4,4 @@ from src.main.api.models.base_model import BaseModel
 
 class ChangeUsernameModel(BaseModel):
     name: Annotated[str, GeneratingRule(regex=r"^[A-Za-z]{3,10} [A-Za-z]{3,10}$")]
+

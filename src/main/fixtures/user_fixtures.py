@@ -17,29 +17,23 @@ def admin_user_request(api_manager):
     return LoginUserRequest(username='admin', password='admin')
 
 @pytest.fixture
-def user_account(api_manager) -> UserAccount:
-    user_data = RandomModelGenerator.generate(CreateUserRequest)
-    api_manager.admin_steps.create_user(user_data)
-    account_id = api_manager.user_steps.create_account(user_data)
-    return UserAccount(user=user_data, account_id=account_id.id)
+def user_account(api_manager, user_request) -> UserAccount:
+    account_id = api_manager.user_steps.set_user(user_request).create_account()
+    return UserAccount(user=user_request, account_id=account_id.id)
 
 @pytest.fixture
-def user_with_two_accounts(api_manager) -> UserTwoAccounts:
-    user_data = RandomModelGenerator.generate(CreateUserRequest)
-    api_manager.admin_steps.create_user(user_data)
-
-    from_account = api_manager.user_steps.create_account(user_data)
-
-    to_account = api_manager.user_steps.create_account(user_data)
-
+def user_with_two_accounts(api_manager, user_request) -> UserTwoAccounts:
+    api_manager.user_steps.set_user(user_request)
+    from_account = api_manager.user_steps.create_account()
+    to_account = api_manager.user_steps.create_account()
 
     api_manager.user_steps.deposit_user(
-        user_account=UserAccount(user=user_data, account_id=from_account.id),
-        request_balance=5555
+        from_account.id,
+        5000
     )
 
     return UserTwoAccounts(
-        user=user_data,
+        user=user_request,
         from_account_id=from_account.id,
         to_account_id=to_account.id,
     )

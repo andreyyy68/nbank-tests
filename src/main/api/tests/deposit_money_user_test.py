@@ -1,5 +1,5 @@
 import pytest
-from src.main.api.classes.api_manager import ApiManager
+from src.main.classes.api_manager import ApiManager
 from src.main.api.models.transaction_type import TransactionType
 
 
@@ -14,8 +14,8 @@ class TestDepositMoneyUser:
                    (4000)]
     )
     def test_valid_deposit_user(self, api_manager: ApiManager, user_account, balance):
-        api_manager.user_steps.deposit_user(user_account, balance)
-        response = api_manager.user_steps.get_transactions(user_account)
+        api_manager.user_steps.set_user(user_account.user).deposit_user(user_account_id=user_account.account_id, request_balance=balance)
+        response = api_manager.user_steps.get_transactions(user_account.account_id)
 
         for transaction in response:
             assert transaction.relatedAccountId == user_account.account_id
@@ -33,15 +33,15 @@ class TestDepositMoneyUser:
     )
     @pytest.mark.debug
     def test_invalid_deposit_user(self, api_manager: ApiManager, user_account, balance, expected_status):
-        api_manager.user_steps.invalid_deposit_user(user_account, balance, expected_status)
-        response = api_manager.user_steps.get_transactions(user_account)
+        api_manager.user_steps.set_user(user_account.user).invalid_deposit_user(user_account.account_id, balance, expected_status)
+        response = api_manager.user_steps.get_transactions(user_account.account_id)
 
         for transaction in response:
             assert transaction.amount < 0
 
         # Проверка депозита на не сущ. аккаунт
     def test_invalid_account_user(self, api_manager: ApiManager, user_request):
-        api_manager.user_steps.deposit_ivalid_id_user(user_request, request_balance=1)
+        api_manager.user_steps.set_user(user_request).deposit_ivalid_id_user(request_balance=1)
 
 
 
