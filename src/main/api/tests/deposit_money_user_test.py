@@ -4,7 +4,8 @@ from src.main.api.models.transaction_type import TransactionType
 
 
 
-
+@pytest.mark.regression
+@pytest.mark.api
 class TestDepositMoneyUser:
     @pytest.mark.parametrize(
         argnames="balance",
