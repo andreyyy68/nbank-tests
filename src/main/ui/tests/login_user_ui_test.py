@@ -6,6 +6,7 @@ from src.main.ui.pages.user_dashboard_page import UserDashboardPage
 import pytest
 
 
+@pytest.mark.regression
 @pytest.mark.ui
 class TestLoginUser:
     def test_login_admin(self, new_page):

@@ -74,10 +74,10 @@ class UserSteps(BaseSteps):
 
 
     def change_invalid_username(self, invalud_user_request: ChangeUsernameModel):
-        ValidatedCrudRequester(
+        CrudRequester(
             RequestSpec.user_auth_spec(username=self.user.username, password=self.user.password),
             Endpoint.CHANGE_USERNAME,
-            ResponseSpec.request_returns_ok()
+            ResponseSpec.request_returns_bad_request(error_key="error", error_value="Name must contain two words with letters only")
         ).update(invalud_user_request)
 
     def deposit_user(self, user_account_id, request_balance: Optional[int] = None):

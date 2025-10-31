@@ -4,6 +4,7 @@ from src.main.ui.constants.defaults import DefaultValues
 from src.main.ui.pages.transfer_page import TransferPage
 
 
+@pytest.mark.regression
 @pytest.mark.ui
 class TestTransfer:
     @pytest.mark.parametrize(

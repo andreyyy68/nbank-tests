@@ -3,7 +3,8 @@ from src.main.api.models.user_two_accounts import UserTwoAccounts
 import pytest
 
 
-
+@pytest.mark.regression
+@pytest.mark.api
 class TestTransferMoney():
     # Дефолтный позитивный (между своими счетами)
     def test_transfer_money(self, api_manager: ApiManager, user_with_two_accounts: UserTwoAccounts, amount=300):

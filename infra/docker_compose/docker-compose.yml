@@ -1,0 +1,50 @@
+services:
+  backend:
+    image: nobugsme/nbank:with_deletion
+    ports:
+      - "4111:4111"
+    networks:
+      - nbank-network
+
+  frontend:
+    image: nobugsme/nbank-ui:latest
+    expose:
+      - "80"
+    depends_on:
+      - backend
+    networks:
+      - nbank-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - nbank-network
+
+  tests:
+    image: nbank-test:with_deletion
+    depends_on:
+      - backend
+      - frontend
+      - nginx
+    networks:
+      - nbank-network
+    volumes:
+      - ./logs:/app/logs
+      - ./test-output:/app/reports
+    environment:
+      - BACKEND_URL=http://backend:4111/api/v1
+      - UI_URL=http://nginx
+      - TEST_PROFILE=all
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  nbank-network:
+    name: nbank-network
