@@ -8,3 +8,11 @@ __pycache__/
 .idea/
 .venv/
 env/
+
+infra/docker_compose/test-output/
+reports/
+src/main/ui/tests/reports/
+*.html
+*.xml
+allure-results/
+test-results/
