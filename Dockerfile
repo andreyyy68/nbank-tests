@@ -16,8 +16,8 @@ RUN pip install --upgrade pip \
 
 # Аргументы для сборки (можно задавать при docker build)
 ARG TEST_PROFILE=ui
-ARG BACKEND_URL=http://backend:4111/api/v1
-ARG UI_BASE_URL=http://nginx
+ARG BACKEND_URL=http://localhost:4111
+ARG UI_BASE_URL=http://localhost:3000
 
 # ENV переменные по умолчанию
 ENV TEST_PROFILE=${TEST_PROFILE}
