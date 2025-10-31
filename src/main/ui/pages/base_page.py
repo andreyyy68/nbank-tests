@@ -50,6 +50,7 @@ class BasePage(ABC):
 
     def get_profile_name(self):
         self.page.reload()
+        self.profile_name.wait_for(state="attached")
         return self.profile_name.text_content()
 
     def check_redirect_to(self, expected_url: str):
