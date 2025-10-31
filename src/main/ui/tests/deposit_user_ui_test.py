@@ -6,6 +6,7 @@ import pytest
 
 
 
+@pytest.mark.regression
 @pytest.mark.ui
 class TestDepositUser:
     def test_valid_deposit_user(self, api_manager, user_page, user_account):
