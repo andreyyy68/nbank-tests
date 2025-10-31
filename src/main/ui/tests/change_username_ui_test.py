@@ -6,6 +6,7 @@ from src.main.ui.pages.edit_profile_page import EditProfilePage
 from src.main.ui.constants.defaults import DefaultValues
 
 
+@pytest.mark.regression
 @pytest.mark.ui
 class TestChangeUsername:
     def test_valid_change_username(self, user_page, api_manager):
