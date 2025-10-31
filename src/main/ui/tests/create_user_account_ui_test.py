@@ -2,6 +2,7 @@ import pytest
 from src.main.ui.pages.user_dashboard_page import UserDashboardPage
 
 
+@pytest.mark.regression
 @pytest.mark.ui
 class TestCreateUserAccount:
     def test_user_create_account(self, user_page, api_manager):
