@@ -5,7 +5,7 @@ from src.main.api.models.create_user_request import CreateUserRequest
 
 
 
-
+@pytest.mark.regression
 @pytest.mark.api
 class TestCreateUser:
     @pytest.mark.parametrize(
