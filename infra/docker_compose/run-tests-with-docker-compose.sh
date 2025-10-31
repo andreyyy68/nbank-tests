@@ -1,30 +1,28 @@
 #!/bin/bash
 set -e
 
-# Перейти в директорию скрипта
-cd "$(dirname "$0")"
+# Профиль тестов (ui, api или оба), по умолчанию "ui or api"
+TEST_PROFILE=${1:-"ui or api"}
 
-TEST_PROFILE=${1:-"regression"}
+# Очищаем старые контейнеры, тома и сирот
+echo ">>> Stopping and removing old containers..."
+docker compose down --volumes --remove-orphans
 
-# Указываем путь к docker-compose.yml
-COMPOSE_FILE="./docker-compose.yml"
+# Поднимаем backend и frontend
+echo ">>> Starting backend and frontend..."
+docker compose up -d backend frontend
 
-# Проверяем, что файл существует
-if [ ! -f "$COMPOSE_FILE" ]; then
-  echo "❌ Не найден $COMPOSE_FILE"
-  exit 1
-fi
+# Ждем 5 секунд (можно увеличить, если сервисы тяжелые)
+sleep 5
 
-# Останавливаем старые контейнеры
-docker compose -f "$COMPOSE_FILE" down || true
+# Запуск тестов через твой образ
+echo ">>> Running tests in Docker container..."
+docker run --rm \
+  -e TEST_PROFILE="$TEST_PROFILE" \
+  -e BACKEND_URL="http://host.docker.internal:4111" \
+  -e UI_BASE_URL="http://host.docker.internal:3000" \
+  -v $(pwd)/reports:/app/reports \
+  -v $(pwd)/logs:/app/logs \
+  your-image-name
 
-# Запускаем сервисы
-docker compose -f "$COMPOSE_FILE" up -d backend frontend nginx
-
-# Запуск тестов
-docker compose -f "$COMPOSE_FILE" run --rm tests pytest ${TEST_PROFILE:+-m "$TEST_PROFILE"} \
-  --html=/app/reports/report.html --self-contained-html --alluredir=/app/reports/allure \
-  -v -s --tb=long --log-level=DEBUG
-
-# Останавливаем контейнеры
-docker compose -f "$COMPOSE_FILE" down
+echo ">>> Tests finished!"
