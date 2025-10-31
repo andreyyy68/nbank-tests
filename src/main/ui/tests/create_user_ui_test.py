@@ -6,6 +6,9 @@ from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.ui.pages.admin_panel_page import AdminPanelPage
 from src.main.ui.constants.alert_message import AlertMessage
 
+
+
+@pytest.mark.regression
 @pytest.mark.ui
 class TestCreateUser:
     @pytest.mark.parametrize("create_user_request", [RandomModelGenerator.generate(CreateUserRequest)])
