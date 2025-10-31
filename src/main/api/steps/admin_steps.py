@@ -43,9 +43,8 @@ class AdminSteps(BaseSteps):
         ).get()
 
         user = next((u for u in response if u.username == username), None)
-        if user is None:
-            raise ValueError(f"User with username {username} not found")
         return user
+
 
 
 
