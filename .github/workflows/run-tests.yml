@@ -1,0 +1,27 @@
+name: Run tests
+
+# триггер
+on: [ push, workflow_dispatch ]
+
+jobs: # аналог этапов
+  run-tests:
+    name: Set up services (review apps) and run tests
+    runs-on: ubuntu-latest
+    steps: # шаги конкретной джобы
+      - name: Checkout Repository # копируем файлы репозитория внутрть CI агента (раннера)
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Cache Pip repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Run test
+        run: bash infra/docker_compose/run-tests-with-docker-compose.sh
