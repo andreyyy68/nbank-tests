@@ -34,19 +34,3 @@ class DepositPage(BasePage):
         if match:
             self.deposit_amount = float(match.group(1))
         return self.deposit_amount
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
