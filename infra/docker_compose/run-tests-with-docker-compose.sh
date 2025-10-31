@@ -1,27 +1,17 @@
 #!/bin/bash
 
-TEST_PROFILE=${1:-"regression"}
+TEST_PROFILE=${1:-"ui or api"}
 
-# Папка для отчетов на хосте
-REPORTS_DIR="$(pwd)/test-output"
-mkdir -p "$REPORTS_DIR"
+# Останавливаем старые контейнеры
+docker compose down
 
-# Останавливаем старые контейнеры (без ошибки, если нет)
-docker-compose down || true
+# Запускаем сервисы
+docker compose up -d backend frontend nginx
 
-# Поднимаем сервисы
-docker-compose up -d backend frontend nginx
-
-sleep 10
-
-# Запуск тестов с отчетами
-docker-compose run --rm \
-  -v "$REPORTS_DIR":/app/reports \
-  tests pytest -m "$TEST_PROFILE" \
-    --html=/app/reports/report.html \
-    --self-contained-html \
-    --alluredir=/app/reports/allure \
+# Запуск тестов
+docker compose run --rm tests pytest ${TEST_PROFILE:+-m "$TEST_PROFILE"} \
+    --html=/app/reports/report.html --self-contained-html --alluredir=/app/reports/allure \
     -v -s --tb=long --log-level=DEBUG
 
-# Завершаем окружение
-docker-compose down
+# Останавливаем контейнеры
+docker compose down
