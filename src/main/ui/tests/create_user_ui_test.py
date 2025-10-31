@@ -24,7 +24,7 @@ class TestCreateUser:
     def test_admin_can_not_create_user_with_invalid_data(self, api_manager, admin_page):
         user_data = RandomModelGenerator.generate(CreateUserRequest)
         username = RandomData.generate_username()
-        admin_create_user_page = AdminPanelPage(admin_page).open(). create_user(username=username, password=user_data.password, message=AlertMessage.USER_CREATED_FAILED)
+        admin_create_user_page = AdminPanelPage(admin_page).open().create_user(username=username, password=user_data.password, message=AlertMessage.USER_CREATED_FAILED)
 
         ui_user = admin_create_user_page.find_user_by_username(user_data.username)
         assert not ui_user, "Found user in UI"

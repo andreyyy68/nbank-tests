@@ -31,7 +31,7 @@ class AdminPanelPage(BasePage):
     def find_user_by_username(self, username: str):
         user_locator = self.page.locator(f"li:has-text('{username}')").first
         try:
-            expect(user_locator).to_be_visible()
+            expect(user_locator).to_have_text(username)
         except:
             pass
 
@@ -42,3 +42,7 @@ class AdminPanelPage(BasePage):
         user = self.find_user_by_username(request.username)
         assert user, "Could not find user in UI"
         ModelAssertions(user, request).match()
+
+    def get_text_admin_panel(self) -> str:
+        return self.get_text(self.header)
+

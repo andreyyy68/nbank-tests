@@ -69,6 +69,14 @@ class BasePage(ABC):
         if message:
             assert message in self.current_alert_message, f"Incorrect alert message: {self.current_alert_message}"
 
+    def get_text(self, locator) -> str | None:
+        try:
+            return locator.text_content()
+        except Exception:
+            return None
+
+
+
 
 
 

@@ -30,3 +30,6 @@ class UserDashboardPage(BasePage):
             account_number = match.group(1)
         assert account_number, "Could not extract account number"
         return account_number
+
+    def get_text_user_dashboard(self) -> str:
+        return self.get_text(self.header)

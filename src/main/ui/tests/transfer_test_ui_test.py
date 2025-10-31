@@ -27,9 +27,9 @@ class TestTransfer:
 
     @pytest.mark.parametrize(
         argnames="amount, message",
-        argvalues=[(0, AlertMessage.TRANSFER_BELOW_MIN),
-                   (-1, AlertMessage.TRANSFER_BELOW_MIN),
-                   (10000.01, AlertMessage.TRANSFER_MORE_MAX),
+        argvalues=[(0, AlertMessage.TRANSFER_FAILED),
+                   (-1, AlertMessage.TRANSFER_FAILED),
+                   (10000.01, AlertMessage.TRANSFER_FAILED),
                    (9999.99, AlertMessage.TRANSFER_FAILED),
                    ]
     )

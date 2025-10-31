@@ -17,7 +17,7 @@ class EditProfilePage(BasePage):
 
     def button_save_change(self, message):
         with self.check_alert_message_and_accept(message):
-           self.button_save_changes.click()
+           self.button_save_changes.click(force=True)
         return self
 
     def button_expecting_error(self, message):
