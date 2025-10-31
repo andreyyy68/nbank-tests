@@ -16,6 +16,7 @@ mkdir -p "$TEST_OUTPUT_DIR/reports"
 echo ">>> Тесты запущены"
 
 docker run --rm \
+  --network host \
   -v "$TEST_OUTPUT_DIR/logs":/app/logs \
   -v "$TEST_OUTPUT_DIR/reports":/app/reports \
   -e TEST_PROFILE="$TEST_PROFILE" \
