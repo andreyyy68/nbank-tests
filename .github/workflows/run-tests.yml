@@ -20,7 +20,7 @@ jobs:
         run: playwright install --with-deps
 
       - name: Run app
-        run: make start-app
+        run: docker-compose up -d
 
       - name: Run tests
         env:
