@@ -26,9 +26,9 @@ class EditProfilePage(BasePage):
 
     def get_profile_name(self):
         self.page.reload(timeout=50000)
-        self.profile_name.wait_for(state="visible")
-        return self.profile_name.text_content()
-
+        profile_name = self.page.locator(".user-name")
+        profile_name.wait_for(state="visible")
+        return profile_name.text_content()
 
 
 
