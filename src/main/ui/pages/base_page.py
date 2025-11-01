@@ -50,6 +50,7 @@ class BasePage(ABC):
 
     def get_profile_name(self):
         self.page.reload()
+        self.page.wait_for_load_state("domcontentloaded")
         self.profile_name.wait_for(state="attached")
         return self.profile_name.text_content()
 
