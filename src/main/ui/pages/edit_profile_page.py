@@ -24,6 +24,13 @@ class EditProfilePage(BasePage):
        self._handle_alert_before_click(message=message, button_locator=self.button_save_changes)
        return self
 
+    def get_profile_name(self):
+        self.page.reload()
+        self.page.wait_for_load_state("domcontentloaded")
+        profile = self.page.locator(".user-info .user-name")
+        profile.wait_for(state="visible", timeout=5000)  # ждём появления элемента
+        return profile.text_content()
+
 
 
 
