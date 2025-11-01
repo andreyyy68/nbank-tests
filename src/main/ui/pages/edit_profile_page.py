@@ -25,11 +25,10 @@ class EditProfilePage(BasePage):
        return self
 
     def get_profile_name(self):
-        self.page.reload()
-        self.page.wait_for_load_state("domcontentloaded")
-        profile = self.page.locator(".user-info .user-name")
-        profile.wait_for(state="visible", timeout=5000)  # ждём появления элемента
-        return profile.text_content()
+        self.page.reload(timeout=50000)
+        self.profile_name.wait_for(state="visible")
+        return self.profile_name.text_content()
+
 
 
 
