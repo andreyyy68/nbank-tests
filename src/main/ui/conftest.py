@@ -16,7 +16,6 @@ def browser_context_args(browser_context_args):
 
 @pytest.fixture(scope="session")
 def browser():
-    # sync_playwright стартует только в рамках сессии текущего воркера
     p = sync_playwright().start()
     browser = p.chromium.launch(headless=True)
     yield browser
@@ -28,7 +27,6 @@ def new_context(browser: Browser, browser_context_args):
     context = browser.new_context(**browser_context_args)
     yield context
     context.close()
-
 
 @pytest.fixture
 def new_page(new_context):
