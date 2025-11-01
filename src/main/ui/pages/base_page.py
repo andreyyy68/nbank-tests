@@ -50,9 +50,9 @@ class BasePage(ABC):
 
     def get_profile_name(self):
         self.page.reload()
-        profile_name = self.page.locator(".user-name")
-        expect(profile_name).not_to_have_text("")
-        return self.profile_name.text_content()
+        profile_reload_name = self.page.locator(".user-name")
+        expect(profile_reload_name).not_to_have_text("")
+        return profile_reload_name.text_content()
 
     def check_redirect_to(self, expected_url: str):
         self.page.wait_for_url(expected_url)
