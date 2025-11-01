@@ -71,16 +71,8 @@ class BasePage(ABC):
         except Exception:
             return None
 
-    def refresh_page(self):
-        try:
-            self.open()
-        except Exception:
-            self.page.reload()
-        return self
-
     def get_profile_name(self, expected_name: str):
-        self.refresh_page()
-
+        self.open()
         if expected_name:
             self.profile_name.wait_for(state="attached")
 
