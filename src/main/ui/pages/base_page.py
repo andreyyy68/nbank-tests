@@ -72,15 +72,17 @@ class BasePage(ABC):
         except Exception:
             return None
 
-    def get_profile_name(self):
-        profile = self.page.locator(".user-info .user-name")
-        expect(profile).to_be_visible(timeout=30000)
-        return profile.inner_text().strip()
+    def get_profile_name(self, expected_name):
+        self.page.reload()
+        self.profile_name.wait_for(state="visible")
+        assert self.profile_name.text_content()  == expected_name
+        return self
 
     def get_welcome_text(self):
-        welcome = self.page.locator("#welcome-text")
-        expect(welcome).to_be_visible(timeout=30000)
-        return welcome.inner_text().strip()
+        self.welcome_text.wait_for(state="visible")
+        return self.welcome_text.text_content()
+
+
 
 
 
