@@ -9,6 +9,19 @@ ENV TEST_PROFILE=${TEST_PROFILE}
 ENV BACKEND_URL=${BACKEND_URL}
 ENV UI_BASE_URL=${UI_BASE_URL}
 
+
+RUN apt-get update && apt-get install -y \
+    curl unzip libglib2.0-0 libnss3 libnspr4 libdbus-1-3 \
+    libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 \
+    libxcomposite1 libxdamage1 libxrandr2 libgbm1 libxss1 libasound2 \
+    libatspi2.0-0 libwayland-client0 libxfixes3 libx11-xcb1 \
+    python3.13-venv \
+    && rm -rf /var/lib/apt/lists/*
+
+# Установка pip и необходимых пакетов
+RUN pip install --upgrade pip \
+    && pip install pytest pytest-html allure-pytest playwright \
+    && playwright install chromium
 # Рабочая директория
 WORKDIR /app
 
@@ -29,8 +42,7 @@ CMD ["/bin/bash", "-c", "\
     echo '>>> Backend URL: '$BACKEND_URL && \
     echo '>>> UI URL: '$UI_BASE_URL && \
     echo '>>> Starting tests immediately...' && \
-    pytest -m \"$TEST_PROFILE\" --html=/app/reports/report.html --self-contained-html --alluredir=/app/reports/allure"]
-
+    pytest -m \"$TEST_PROFILE\" --html=/app/reports/report.html --self-contained-html --alluredir=/app/reports/allure"
 
 
 
