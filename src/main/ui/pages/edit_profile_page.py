@@ -1,5 +1,5 @@
 from src.main.ui.pages.base_page import BasePage
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 
 class EditProfilePage(BasePage):
     def __init__(self, page: Page):
@@ -24,11 +24,16 @@ class EditProfilePage(BasePage):
        self._handle_alert_before_click(message=message, button_locator=self.button_save_changes)
        return self
 
-    def get_profile_name(self):
-        self.page.reload(timeout=50000)
+    def get_profile_name(self, expected_name=None):
+        self.page.reload()
+        self.page.wait_for_load_state("domcontentloaded")
         profile_name = self.page.locator(".user-name")
         profile_name.wait_for(state="visible")
+
+        if expected_name:
+            expect(profile_name).to_have_text(expected_name, timeout=5000)
         return profile_name.text_content()
+
 
 
 
