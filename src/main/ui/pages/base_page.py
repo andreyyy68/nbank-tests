@@ -73,20 +73,15 @@ class BasePage(ABC):
             return None
 
     def get_profile_name(self):
-        self.open()
-        self.page.wait_for_load_state("domcontentloaded")
-
         profile = self.page.locator(".user-info .user-name")
-        expect(profile).to_be_visible()
-
+        expect(profile).to_be_visible(timeout=30000)
         return profile.inner_text().strip()
 
-
     def get_welcome_text(self):
-        self.page.set_default_timeout(30000)
-        self.page.wait_for_load_state("domcontentloaded")
-        expect(self.welcome_text).to_be_visible()
-        return self.welcome_text.inner_text()
+        welcome = self.page.locator("#welcome-text")
+        expect(welcome).to_be_visible(timeout=30000)
+        return welcome.inner_text().strip()
+
 
 
 
