@@ -24,11 +24,8 @@ class EditProfilePage(BasePage):
        self._handle_alert_before_click(message=message, button_locator=self.button_save_changes)
        return self
 
-    def get_profile_name(self, expected_name):
-        self.page.reload()
-        profile_name = self.page.locator(".user-info .user-name")
-        expect(profile_name).to_have_text(expected_name)
-        return profile_name.text_content()
+
+
 
 
 

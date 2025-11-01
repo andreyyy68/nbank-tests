@@ -71,6 +71,22 @@ class BasePage(ABC):
         except Exception:
             return None
 
+    def refresh_page(self):
+        try:
+            self.page.goto(self.base_url)
+        except Exception:
+            self.page.reload()
+        return self
+
+    def get_profile_name(self, expected_name: str):
+        self.refresh_page()
+
+        if expected_name:
+            expect(self.profile_name).to_have_text(expected_name)
+
+        return self.profile_name.text_content()
+
+
 
 
 
