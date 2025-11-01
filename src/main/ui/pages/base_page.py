@@ -74,20 +74,20 @@ class BasePage(ABC):
 
     def get_profile_name(self):
         self.open()
-        profile = self.page.locator(".user-info .user-name")
-        try:
-            profile.wait_for(state="visible", timeout=30000)
-            return profile.inner_text()
-        except:
-            return None
+        self.page.wait_for_load_state("networkidle")
 
-    def get_welcome_text(self, expected_text: str):
-        try:
-            if expected_text:
-                expect(self.welcome_text).to_have_text(expected_text)
-        except:
-            pass
+        profile = self.page.locator(".user-info .user-name")
+        expect(profile).to_be_visible()
+
+        return profile.inner_text().strip()
+
+
+    def get_welcome_text(self):
+        self.page.set_default_timeout(30000)
+        self.page.wait_for_load_state("networkidle")
+        expect(self.welcome_text).to_be_visible()
         return self.welcome_text.inner_text()
+
 
 
 
