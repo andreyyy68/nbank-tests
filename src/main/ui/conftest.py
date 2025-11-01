@@ -12,6 +12,7 @@ def browser_context_args(browser_context_args):
     return {
         **browser_context_args,
         "base_url": Config.get("ui_base_url"),
+        "headless": True,
     }
 
 @pytest.fixture
