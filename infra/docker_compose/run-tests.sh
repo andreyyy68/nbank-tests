@@ -22,7 +22,7 @@ docker run --rm \
   -e TEST_PROFILE="$TEST_PROFILE" \
   -e BACKEND_URL="http://backend:4111/api/v1" \
   -e UI_BASE_URL="http://frontend:80" \
-  $IMAGE_NAME \
-  pytest -n auto --dist=loadscope -m "ui or api"
+  $IMAGE_NAME
+
 
 echo ">>> Тесты завершены"

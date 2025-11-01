@@ -14,14 +14,6 @@ def browser_context_args(browser_context_args):
         "base_url": Config.get("ui_base_url"),
     }
 
-@pytest.fixture(scope="session")
-def browser():
-    p = sync_playwright().start()
-    browser = p.chromium.launch(headless=True)
-    yield browser
-    browser.close()
-    p.stop()
-
 @pytest.fixture
 def new_context(browser: Browser, browser_context_args):
     context = browser.new_context(**browser_context_args)
