@@ -18,7 +18,7 @@ class BasePage(ABC):
         self.fill_amount = self.page.get_by_placeholder("Enter amount")
         self.base_url = Config.get('ui_base_url')
         self.get_by_check = self.page.locator("#confirmCheck")
-        self.profile_name = self.page.locator(".user-name")
+        self.profile_name = self.page.locator(".user-info .user-name")
 
         self.current_alert_message = None
         self.deposit_amount = None
@@ -50,11 +50,8 @@ class BasePage(ABC):
 
     def get_profile_name(self):
         self.page.reload()
-        profile = self.page.query_selector("#profile-name")
-        if profile:
-            return profile.text_content()
-        else:
-            return None
+        self.profile_name.wait_for(state="attached")
+        return self.profile_name.text_content()
 
     def check_redirect_to(self, expected_url: str):
         self.page.wait_for_url(expected_url)
