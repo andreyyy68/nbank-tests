@@ -42,8 +42,7 @@ CMD ["/bin/bash", "-c", "\
     echo '>>> Backend URL: '$BACKEND_URL && \
     echo '>>> UI URL: '$UI_BASE_URL && \
     echo '>>> Starting tests immediately...' && \
-    pytest -m \"$TEST_PROFILE\" --html=/app/reports/report.html --self-contained-html --alluredir=/app/reports/allure"
-    ]
+    pytest -m \"$TEST_PROFILE\" --html=/app/reports/report.html --self-contained-html --alluredir=/app/reports/allure"]
 
 
 
