@@ -12,6 +12,7 @@ ENV UI_BASE_URL=${UI_BASE_URL}
 # Рабочая директория
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 # Копируем requirements и устанавливаем
 COPY requirements.txt .
 RUN pip install -r requirements.txt
