@@ -6,3 +6,4 @@ rstr==3.2.2
 pytest-playwright==0.7.1
 pytest-html==4.1.1
 allure-pytest==2.15.0
+pytest-xdist==3.0.0
