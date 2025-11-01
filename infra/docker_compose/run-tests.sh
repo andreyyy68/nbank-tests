@@ -20,8 +20,8 @@ docker run --rm \
   -v "$TEST_OUTPUT_DIR/logs":/app/logs \
   -v "$TEST_OUTPUT_DIR/reports":/app/reports \
   -e TEST_PROFILE="$TEST_PROFILE" \
-  -e BACKEND_URL="http://localhost:4111/api/v1" \
-  -e UI_BASE_URL="http://localhost:3000" \
+  -e BACKEND_URL="http://backend:4111/api/v1" \
+  -e UI_BASE_URL="http://frontend:80" \
   $IMAGE_NAME
 
 echo ">>> Тесты завершены"
