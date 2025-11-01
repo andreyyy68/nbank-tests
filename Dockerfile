@@ -28,10 +28,7 @@ CMD ["/bin/bash", "-c", "\
     echo '>>> Running tests with profile: '$TEST_PROFILE && \
     echo '>>> Backend URL: '$BACKEND_URL && \
     echo '>>> UI URL: '$UI_BASE_URL && \
-    until curl -s -f $UI_BASE_URL > /dev/null; do \
-        echo 'Waiting for UI...'; sleep 2; \
-    done; \
-    echo 'UI is up! Starting tests...' && \
+    echo '>>> Starting tests immediately...' && \
     pytest -m \"$TEST_PROFILE\" --html=/app/reports/report.html --self-contained-html --alluredir=/app/reports/allure"]
 
 
