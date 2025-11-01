@@ -9,7 +9,6 @@ class UserDashboardPage(BasePage):
         super().__init__(page)
 
         self.header = page.locator("text='User Dashboard'")
-        self.welcome_text = page.locator(".welcome-text")
         self.create_account_button = page.get_by_role("button", name="Create New Account")
         self.deposit_money_button = page.get_by_role("button", name="Deposit Money")
 

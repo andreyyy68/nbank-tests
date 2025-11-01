@@ -19,6 +19,7 @@ class BasePage(ABC):
         self.base_url = Config.get('ui_base_url')
         self.get_by_check = self.page.locator("#confirmCheck")
         self.profile_name = self.page.locator(".user-info .user-name")
+        self.welcome_text = page.locator(".welcome-text")
 
         self.current_alert_message = None
         self.deposit_amount = None
@@ -71,12 +72,17 @@ class BasePage(ABC):
         except Exception:
             return None
 
-    def get_profile_name(self, expected_name: str):
+    def get_profile_name(self):
         self.open()
-        if expected_name:
-            self.profile_name.wait_for(state="attached")
-
         return self.profile_name.text_content()
+
+    def get_welcome_text(self, expected_text):
+        if expected_text:
+            expect(self.welcome_text).to_have_text(expected_text)
+        return self.welcome_text.text_content()
+
+
+
 
 
 

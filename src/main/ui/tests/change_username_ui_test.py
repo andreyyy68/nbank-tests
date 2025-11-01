@@ -18,7 +18,7 @@ class TestChangeUsername:
             button_save_change(AlertMessage.NAME_UPDATE)
         )
 
-        ui_username = name.get_profile_name(data_user.name)
+        ui_username = name.get_profile_name()
         assert ui_username == data_user.name
 
         username = api_manager.user_steps.get_changed_username()
@@ -29,7 +29,7 @@ class TestChangeUsername:
                 open().
                 button_expecting_error(AlertMessage.NAME_UPDATED_FAILED))
 
-        ui_username = name.get_profile_name(DefaultValues.NONAME)
+        ui_username = name.get_profile_name()
         assert ui_username == DefaultValues.NONAME
 
         current_username = api_manager.user_steps.get_changed_username()
