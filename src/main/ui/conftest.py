@@ -1,5 +1,5 @@
 import pytest
-from playwright.sync_api import Browser
+from playwright.sync_api import Browser, sync_playwright
 from src.main.configs.config import Config
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.ui.helpers.context import add_item_to_local_storage
@@ -12,8 +12,16 @@ def browser_context_args(browser_context_args):
     return {
         **browser_context_args,
         "base_url": Config.get("ui_base_url"),
-        "headless": True,
     }
+
+@pytest.fixture(scope="session")
+def browser():
+    # sync_playwright стартует только в рамках сессии текущего воркера
+    p = sync_playwright().start()
+    browser = p.chromium.launch(headless=True)
+    yield browser
+    browser.close()
+    p.stop()
 
 @pytest.fixture
 def new_context(browser: Browser, browser_context_args):
