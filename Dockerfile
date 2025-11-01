@@ -13,8 +13,11 @@ ENV UI_BASE_URL=${UI_BASE_URL}
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+RUN playwright install --with-deps
 # Копируем requirements и устанавливаем
 COPY requirements.txt .
+
 RUN pip install -r requirements.txt
 
 # Копируем код тестов
