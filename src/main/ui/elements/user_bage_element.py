@@ -6,17 +6,24 @@ class UserBadgeElement(BaseElement):
         super().__init__(locator)
         self.username = None
         self.role = None
+        self.text = None
 
-        try:
-            locator.wait_for(state="visible")
-            text = locator.inner_text()
-        except:
+        for _ in range(10):
             try:
-                text = locator.evaluate("el => el.textContent").strip()
+                locator.wait_for(state="visible")
+                self.text = locator.inner_text().strip()
             except:
-                text = None
+                self.text = None
 
-        if text:
-            parts = text.split()
+            if self.text:
+                break
+        else:
+            try:
+                self.text = locator.evaluate("el => el.textContent").strip()
+            except:
+                self.text = None
+
+        if self.text:
+            parts = self.text.split()
             if len(parts) >= 2:
                 self.username, self.role = parts[0], parts[1]
