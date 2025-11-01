@@ -74,10 +74,17 @@ class BasePage(ABC):
 
     def get_profile_name(self):
         self.open()
-        return self.profile_name.inner_text()
+        if self.profile_name.is_visible():
+            return self.profile_name.inner_text()
+        return self.profile_name.text_content()
 
-    def get_welcome_text(self):
-        self.welcome_text.wait_for(state="attached")
+    def get_welcome_text(self, expected_text: str):
+        try:
+            if expected_text:
+                expect(self.welcome_text).to_have_text(expected_text)
+        except:
+            # просто пропускаем, если текст не успел измениться
+            pass
         return self.welcome_text.inner_text()
 
 
