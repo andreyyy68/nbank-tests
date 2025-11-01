@@ -73,7 +73,7 @@ class BasePage(ABC):
 
     def refresh_page(self):
         try:
-            self.page.goto(self.base_url)
+            self.open()
         except Exception:
             self.page.reload()
         return self
@@ -82,7 +82,7 @@ class BasePage(ABC):
         self.refresh_page()
 
         if expected_name:
-            expect(self.profile_name).to_have_text(expected_name)
+            self.profile_name.wait_for(state="attached")
 
         return self.profile_name.text_content()
 

@@ -16,7 +16,7 @@ class TestChangeUsername:
             open().
             edit_profile_name(data_user.name).
             button_save_change(AlertMessage.NAME_UPDATE)
-        ).get_page(EditProfilePage)
+        )
 
         ui_username = name.get_profile_name(data_user.name)
         assert ui_username == data_user.name
