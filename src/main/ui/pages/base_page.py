@@ -74,7 +74,7 @@ class BasePage(ABC):
 
     def get_profile_name(self):
         self.open()
-        self.page.wait_for_load_state("networkidle")
+        self.page.wait_for_load_state("domcontentloaded")
 
         profile = self.page.locator(".user-info .user-name")
         expect(profile).to_be_visible()
@@ -84,7 +84,7 @@ class BasePage(ABC):
 
     def get_welcome_text(self):
         self.page.set_default_timeout(30000)
-        self.page.wait_for_load_state("networkidle")
+        self.page.wait_for_load_state("domcontentloaded")
         expect(self.welcome_text).to_be_visible()
         return self.welcome_text.inner_text()
 
