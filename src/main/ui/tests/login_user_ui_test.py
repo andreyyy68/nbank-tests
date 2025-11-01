@@ -17,4 +17,4 @@ class TestLoginUser:
     def test_login_user(self, new_page, user_request):
         user_dashboard = LoginPage(new_page).open().login(user_request.username, user_request.password).get_page(UserDashboardPage)
         assert user_dashboard.get_text_user_dashboard() == "User Dashboard"
-        assert user_dashboard.get_welcome_text(DefaultValues.WELCOME_NONAME) == DefaultValues.WELCOME_NONAME
+        assert user_dashboard.get_welcome_text() == DefaultValues.WELCOME_NONAME

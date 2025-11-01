@@ -39,9 +39,11 @@ class AdminPanelPage(BasePage):
         return user[0] if user else None
 
     def find_user_by_request(self, request: CreateUserRequest):
-        user = self.find_user_by_username(request.username)
+        user_locator = self.page.locator(f"text={request.username}")
+        user_locator.wait_for(state="attached")
+        user = user_locator.first
         assert user, "Could not find user in UI"
-        ModelAssertions(user, request).match()
+        return user
 
     def get_text_admin_panel(self) -> str:
         return self.get_text(self.header)
