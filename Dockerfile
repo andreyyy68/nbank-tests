@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --upgrade pip \
     && pip install pytest pytest-html allure-pytest playwright \
     && playwright install chromium
-# Рабочая директория
+# Рабочая директорияяё
 WORKDIR /app
 
 # Копируем requirements и устанавливаем
