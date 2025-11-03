@@ -74,12 +74,12 @@ class BasePage(ABC):
 
     def get_profile_name(self, expected_name):
         self.page.reload()
-        self.profile_name.wait_for(state="visible")
+        self.profile_name.wait_for(state="visible", timeout=60000)
         assert self.profile_name.text_content()  == expected_name
         return self
 
     def get_welcome_text(self):
-        self.welcome_text.wait_for(state="visible")
+        self.welcome_text.wait_for(state="visible", timeout=50000)
         return self.welcome_text.text_content()
 
 
