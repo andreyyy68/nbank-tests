@@ -1,8 +1,7 @@
 from typing import Protocol, Optional, Union
-
 import requests
-
 from src.main.api.models.base_model import BaseModel
+
 
 class CrudEndpointInterface(Protocol):
     def post(self, model: Optional[BaseModel] = None, **params) -> requests.Response: ...

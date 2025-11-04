@@ -1,0 +1,53 @@
+name: Run tests
+
+on:
+  push:
+    paths:
+      - 'src/**'
+  workflow_dispatch:
+
+
+jobs:
+  builds-and-push:
+    name: Setup services (review app) and run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+#      - uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.13'
+#          cache: 'pip'
+#      - run: pip install -r requirements.txt
+#
+#      - name: Setup playwright
+#        run: playwright install --with-deps
+
+      - name: Run app
+        run: make start-app&
+
+      - name: Run tests
+        env:
+          SERVER: http://localhost:4111/api
+          API_VERSION: /v1
+          UI_BASE_URL: http://localhost:3000
+        run: make run-tests
+
+      - name: Get commit hash
+        id: vars
+        run: echo "COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+              username: ${{ secrets.DOCKERHUB_USERNAME }}
+              password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: docker build -t andreykulikov68/autotests:${{ env.COMMIT_HASH }} .
+
+      - name: Push Docker image
+        run: docker push andreykulikov68/autotests:${{ env.COMMIT_HASH }}
+
+
