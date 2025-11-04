@@ -15,14 +15,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-          cache: 'pip'
-      - run: pip install -r requirements.txt
-
-      - name: Setup playwright
-        run: playwright install --with-deps
+#      - uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.13'
+#          cache: 'pip'
+#      - run: pip install -r requirements.txt
+#
+#      - name: Setup playwright
+#        run: playwright install --with-deps
 
       - name: Run app
         run: make start-app &
@@ -49,3 +49,15 @@ jobs:
 
       - name: Push Docker image
         run: docker push andreykulikov68/autotests:${{ env.COMMIT_HASH }}
+
+      - name: Upload Allure HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report-${{ github.ref_name }}-${{ github.run_number }}
+          path: test-output/*/reports/html
+
+      - name: Upload raw Allure results
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-results-${{ github.ref_name }}-${{ github.run_number }}
+          path: test-output/*/reports/raw

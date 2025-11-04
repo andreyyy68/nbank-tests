@@ -6,27 +6,33 @@ from src.main.api.specs.request_specs import RequestSpec
 from src.main.api.specs.response_specs import ResponseSpec
 from src.main.api.steps.base_steps import BaseSteps
 from src.main.api.requests.skeleton.endpoint import Endpoint
+import allure
+
 
 
 class AdminSteps(BaseSteps):
     def create_user(self, user_request: CreateUserRequest):
-        create_user_response= ValidatedCrudRequester(
-            RequestSpec.admin_auth_spec(),
-            Endpoint.ADMIN_CREATE_USER,
-            ResponseSpec.entity_was_created(),
-        ).post(user_request)
-        ModelAssertions(user_request, create_user_response).match()
+            self._attach_model(user_request, "User Request")
+            create_user_response = ValidatedCrudRequester(
+                RequestSpec.admin_auth_spec(),
+                Endpoint.ADMIN_CREATE_USER,
+                ResponseSpec.entity_was_created(),
+            ).post(user_request)
+            ModelAssertions(user_request, create_user_response).match()
 
-        self.created_objects.append(create_user_response)
+            self.created_objects.append(create_user_response)
 
-        return create_user_response
+            return create_user_response
+
 
     def create_invalid_user(self, user_request: CreateUserRequest, error_key: str, error_value: str):
-        CrudRequester(
-            RequestSpec.admin_auth_spec(),
-            Endpoint.ADMIN_CREATE_USER,
-            ResponseSpec.request_returns_bad_request(error_key, error_value),
-        ).post(user_request)
+            self._attach_model(user_request, "User Request")
+            CrudRequester(
+                RequestSpec.admin_auth_spec(),
+                Endpoint.ADMIN_CREATE_USER,
+                ResponseSpec.request_returns_bad_request(error_key, error_value),
+            ).post(user_request)
+
 
     def delete_user(self, user_id: int):
         pass
@@ -36,14 +42,16 @@ class AdminSteps(BaseSteps):
         # ).delete(user_id)
 
     def get_user(self, username: str):
-        response = ValidatedCrudRequester(
-            RequestSpec.admin_auth_spec(),
-            Endpoint.GET_USER,
-            ResponseSpec.request_returns_ok()
-        ).get()
+        with allure.step(f"Admin get users, body: {username}"):
+            response = ValidatedCrudRequester(
+                RequestSpec.admin_auth_spec(),
+                Endpoint.GET_USER,
+                ResponseSpec.request_returns_ok()
+            ).get()
 
-        user = next((u for u in response if u.username == username), None)
-        return user
+            user = next((u for u in response if u.username == username), None)
+            return user
+
 
 
 
