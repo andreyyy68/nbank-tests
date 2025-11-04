@@ -1,5 +1,5 @@
 from playwright.sync_api import Page, expect
-from src.main.api.models.comparison.model_assertions import ModelAssertions
+import allure
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.ui.elements.user_bage_element import UserBadgeElement
 from src.main.ui.pages.base_page import BasePage
@@ -22,7 +22,10 @@ class AdminPanelPage(BasePage):
         with self.check_alert_message_and_accept(message):
             self.username_field.fill(username)
             self.password_field.fill(password)
+            self.take_screenshot(username)
+
             self.add_user_button.click()
+
         return self
 
     def get_user(self):
@@ -38,13 +41,17 @@ class AdminPanelPage(BasePage):
         user = [user for user in self.get_user() if user.username == username]
         return user[0] if user else None
 
+    @allure.step("Get user from Dashboard")
     def find_user_by_request(self, request: CreateUserRequest):
         user_locator = self.page.locator(f"text={request.username}")
         user_locator.wait_for(state="attached")
+        self.take_screenshot("user_list")
         user = user_locator.first
         assert user, "Could not find user in UI"
         return user
 
     def get_text_admin_panel(self) -> str:
-        return self.get_text(self.header)
+        get_text = self.get_text(self.header)
+        self.take_screenshot("get_text_admin_panel")
+        return get_text
 
