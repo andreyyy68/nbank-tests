@@ -3,7 +3,6 @@ import pytest
 from src.main.api.models.user_account import UserAccount
 
 
-
 @pytest.mark.api
 class TestCreateAccount:
     def test_create_account(self, api_manager: ApiManager, user_account: UserAccount):
