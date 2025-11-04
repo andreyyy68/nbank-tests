@@ -3,7 +3,7 @@ from src.main.classes.api_manager import ApiManager
 from src.main.api.models.change_username import ChangeUsernameModel
 
 
-@pytest.mark.regression
+
 @pytest.mark.api
 class TestChangeUsername:
     @pytest.mark.debug

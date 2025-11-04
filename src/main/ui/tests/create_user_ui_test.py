@@ -11,8 +11,8 @@ from src.main.ui.constants.alert_message import AlertMessage
 @pytest.mark.regression
 @pytest.mark.ui
 class TestCreateUser:
-    @pytest.mark.parametrize("create_user_request", [RandomModelGenerator.generate(CreateUserRequest)])
-    def test_admin_can_create_user(self, api_manager, admin_page, create_user_request):
+    def test_admin_can_create_user(self, api_manager, admin_page):
+        create_user_request = RandomModelGenerator.generate(CreateUserRequest)
         (AdminPanelPage(admin_page).open().
          create_user(username=create_user_request.username, password=create_user_request.password, message=AlertMessage.USER_CREATED).
          find_user_by_request(create_user_request))

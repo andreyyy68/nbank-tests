@@ -3,6 +3,7 @@ from playwright.sync_api import Page, Dialog, expect
 from src.main.configs.config import Config
 from typing import TypeVar, Type, List
 from contextlib import contextmanager
+import allure
 
 
 
@@ -46,6 +47,11 @@ class BasePage(ABC):
         with self.page.expect_event("dialog") as dialog:
             yield
             self.current_alert_message = dialog.value.message
+            allure.attach(
+                f"Alert message: {dialog.value.message}",
+                name="alert_text",
+                attachment_type=allure.attachment_type.TEXT
+            )
             assert expected_message in self.current_alert_message, f"Incorrect error message: {self.current_alert_message}"
             dialog.value.accept()
 
@@ -62,6 +68,8 @@ class BasePage(ABC):
 
         if button_locator:
             button_locator.click()
+
+        self.take_screenshot("button_expecting_error")
 
         if message:
             assert message in self.current_alert_message, f"Incorrect alert message: {self.current_alert_message}"
@@ -80,7 +88,15 @@ class BasePage(ABC):
 
     def get_welcome_text(self):
         self.welcome_text.wait_for(state="visible", timeout=50000)
+        self.take_screenshot("user_dashboard")
         return self.welcome_text.text_content()
+
+    def take_screenshot(self, name: str):
+        allure.attach(
+            self.page.screenshot(),
+            name=f"screenshot_filled_{name}",
+            attachment_type=allure.attachment_type.PNG
+        )
 
 
 

@@ -1,6 +1,7 @@
 from src.main.ui.pages.base_page import BasePage
 from playwright.sync_api import Page
 import re
+import allure
 
 
 class DepositPage(BasePage):
@@ -14,10 +15,12 @@ class DepositPage(BasePage):
 
     def select_account(self, account_id: int):
         self.choose_an_account.select_option(value=str(account_id))
+        self.take_screenshot("account_id")
         return self
 
     def enter_amount(self, amount: int | float):
         self.fill_amount.fill(str(amount))
+        self.take_screenshot("fill_amount")
         return self
 
     def submit_deposit(self, message: str):

@@ -14,6 +14,7 @@ class LoginPage(BasePage):
     def login(self, username: str, password: str):
         self.username_field.fill(username)
         self.password_field.fill(password)
+        self.take_screenshot("fill_username_and_password")
         self.login_button.click()
         return self
 

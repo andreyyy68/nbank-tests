@@ -5,14 +5,11 @@ from src.main.api.models.create_user_request import CreateUserRequest
 
 
 
-@pytest.mark.regression
 @pytest.mark.api
 class TestCreateUser:
-    @pytest.mark.parametrize(
-        'create_user_request', [RandomModelGenerator.generate(CreateUserRequest)]
-    )
-    def test_create_valid_user(self, api_manager: ApiManager, create_user_request: CreateUserRequest):
-        api_manager.admin_steps.create_user(user_request=create_user_request)
+    def test_create_valid_user(self, api_manager: ApiManager):
+        create_user_request = RandomModelGenerator.generate(CreateUserRequest)
+        api_manager.admin_steps.create_user(create_user_request)
         response = api_manager.admin_steps.get_user(create_user_request.username)
 
         assert response.username == create_user_request.username

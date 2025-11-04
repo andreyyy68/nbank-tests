@@ -1,10 +1,9 @@
 import pytest
-from playwright.sync_api import Browser, sync_playwright
-from src.main.configs.config import Config
+from playwright.sync_api import Browser
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.ui.helpers.context import add_item_to_local_storage
 from src.main.classes.api_manager import ApiManager
-
+from src.main.configs.config import Config
 
 
 @pytest.fixture(scope="session")
@@ -69,6 +68,9 @@ def user_page(user_session):
     page = user_session.new_page()
     yield page
     page.close()
+    
+
+
 
 
 

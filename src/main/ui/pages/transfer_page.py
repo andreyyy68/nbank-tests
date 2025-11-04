@@ -19,22 +19,27 @@ class TransferPage(BasePage):
 
     def select_account(self, account_id):
         self.choose_an_account.select_option(value=str(account_id))
+        self.take_screenshot("choose_an_account")
         return self
 
     def enter_recipient_name(self, name):
         self.recipient_name.fill(name)
+        self.take_screenshot("recipient_name")
         return self
 
     def enter_recipient_account_number(self, account_number):
         self.recipient_account_number.fill(account_number)
+        self.take_screenshot("recipient_account_number")
         return self
 
     def enter_amount(self, amount):
         self.fill_amount.fill(str(amount))
+        self.take_screenshot("fill_amount")
         return self
 
     def check(self):
         self.get_by_check.click()
+        self.take_screenshot("check")
         return self
 
     def transfer(self, message):

@@ -13,11 +13,13 @@ class EditProfilePage(BasePage):
 
     def edit_profile_name(self, name):
         self.edit_profile.fill(name)
+        self.take_screenshot("edit_profile_name")
         return self
 
     def button_save_change(self, message):
         with self.check_alert_message_and_accept(message):
-           self.button_save_changes.click(force=True)
+           expect(self.button_save_changes).to_be_enabled()
+           self.button_save_changes.click()
         return self
 
     def button_expecting_error(self, message):

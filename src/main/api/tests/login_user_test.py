@@ -3,7 +3,7 @@ from src.main.classes.api_manager import ApiManager
 from src.main.api.models.login_user_request import LoginUserRequest
 
 
-@pytest.mark.regression
+
 @pytest.mark.api
 class TestLoginUser:
     @pytest.mark.usefixtures("user_request", "api_manager")

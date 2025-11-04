@@ -4,7 +4,7 @@ from src.main.api.models.transaction_type import TransactionType
 
 
 
-@pytest.mark.regression
+
 @pytest.mark.api
 class TestDepositMoneyUser:
     @pytest.mark.parametrize(
@@ -42,7 +42,7 @@ class TestDepositMoneyUser:
 
         # Проверка депозита на не сущ. аккаунт
     def test_invalid_account_user(self, api_manager: ApiManager, user_request):
-        api_manager.user_steps.set_user(user_request).deposit_ivalid_id_user(request_balance=1)
+        api_manager.user_steps.set_user(user_request).deposit_invalid_id_user(request_balance=1)
 
 
 
