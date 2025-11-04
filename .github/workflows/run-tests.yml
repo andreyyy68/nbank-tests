@@ -27,12 +27,6 @@ jobs:
       - name: Run app
         run: make start-app
 
-      - name: Prepare test directories
-        run: |
-            mkdir -p test-output/reports/raw
-            mkdir -p test-output/reports/html
-            mkdir -p test-output/logs
-
       - name: Run tests
         env:
           SERVER: http://localhost:4111/api
@@ -60,10 +54,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-report-${{ github.ref_name }}-${{ github.run_number }}
-          path: test-output/reports/html
+          path: test-output/html
 
       - name: Upload raw Allure results
         uses: actions/upload-artifact@v4
         with:
           name: allure-results-${{ github.ref_name }}-${{ github.run_number }}
-          path: test-output/reports/raw
+          path: test-output/raw
+
+

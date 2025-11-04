@@ -1,22 +1,28 @@
 #! /bin/bash
 
 IMAGE_NAME=nbank-test
-TEST_PROFILE=${1:-"api"}
+TEST_PROFILE=${1:-"api"}  # api или ui
+
+# Папка для отчётов (фиксированная)
 TEST_OUTPUT_DIR="$(pwd)/test-output"
-RAW_REPORTS_DIR="$TEST_OUTPUT_DIR/reports/raw"
-ALLURE_HTML_DIR="$TEST_OUTPUT_DIR/reports/html"
+RAW_REPORTS_DIR="$TEST_OUTPUT_DIR/raw"
+ALLURE_HTML_DIR="$TEST_OUTPUT_DIR/html"
 LOGS_DIR="$TEST_OUTPUT_DIR/logs"
 
+# ==========================
+# Создаём папки для результатов
+# ==========================
+mkdir -p "$RAW_REPORTS_DIR" "$ALLURE_HTML_DIR" "$LOGS_DIR"
 
-
-mkdir -p "$RAW_REPORTS_DIR"
-mkdir -p "$ALLURE_HTML_DIR"
-mkdir -p "$LOGS_DIR"
-
+# ==========================
+# Сборка Docker образа
+# ==========================
 echo ">>> Сборка Docker образа: $IMAGE_NAME"
 docker build -t $IMAGE_NAME .
 
-
+# ==========================
+# Запуск тестов в Docker с генерацией Allure отчётов
+# ==========================
 echo ">>> Запуск тестов профиля: $TEST_PROFILE"
 
 docker run --rm \
@@ -33,5 +39,4 @@ docker run --rm \
     allure generate /app/reports/raw --clean -o /app/reports/html \
   "
 
-
-echo ">>> Запуск тестов профиля: $TEST_PROFILE"
+echo ">>> Тесты завершены. HTML отчёт доступен в $ALLURE_HTML_DIR"
