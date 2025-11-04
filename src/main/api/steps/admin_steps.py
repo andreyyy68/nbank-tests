@@ -10,6 +10,7 @@ import allure
 
 
 
+
 class AdminSteps(BaseSteps):
     def create_user(self, user_request: CreateUserRequest):
             self._attach_model(user_request, "User Request")
