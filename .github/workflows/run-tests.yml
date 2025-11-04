@@ -51,13 +51,13 @@ jobs:
         run: docker push andreykulikov68/autotests:${{ env.COMMIT_HASH }}
 
       - name: Upload Allure HTML report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: allure-report-${{ github.ref_name }}-${{ github.run_number }}
           path: test-output/*/reports/html
 
       - name: Upload raw Allure results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: allure-results-${{ github.ref_name }}-${{ github.run_number }}
           path: test-output/*/reports/raw
