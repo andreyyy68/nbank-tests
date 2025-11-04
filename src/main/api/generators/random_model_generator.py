@@ -14,6 +14,7 @@ class RandomModelGenerator:
 
         for field_name, annotated_type in type_hints.items():
             rule = None
+            actual_type = annotated_type
 
             if get_origin(annotated_type) is Annotated:
                 actual_type, *annotations = get_args(annotated_type)
