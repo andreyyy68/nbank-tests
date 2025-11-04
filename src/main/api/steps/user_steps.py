@@ -21,6 +21,7 @@ import allure
 
 
 
+
 class UserSteps(BaseSteps):
     def __init__(self, created_object: List[Any]):
         super().__init__(created_object)
