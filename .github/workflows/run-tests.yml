@@ -25,7 +25,13 @@ jobs:
 #        run: playwright install --with-deps
 
       - name: Run app
-        run: make start-app &
+        run: make start-app
+
+      - name: Prepare test directories
+        run: |
+            mkdir -p test-output/reports/raw
+            mkdir -p test-output/reports/html
+            mkdir -p test-output/logs
 
       - name: Run tests
         env:
@@ -54,10 +60,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-report-${{ github.ref_name }}-${{ github.run_number }}
-          path: test-output/html
+          path: test-output/reports/html
 
       - name: Upload raw Allure results
         uses: actions/upload-artifact@v4
         with:
           name: allure-results-${{ github.ref_name }}-${{ github.run_number }}
-          path: test-output/raw
+          path: test-output/reports/raw
