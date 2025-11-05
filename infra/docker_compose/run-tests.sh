@@ -23,7 +23,7 @@ docker run --rm \
   -e UI_BASE_URL="http://frontend:80" \
   $IMAGE_NAME \
   bash -c "\
-    pytest --headed=false --slowmo 0 \
+    pytest --junitxml=/app/reports/raw/results.xml --tb=short \
   "
 
 echo ">>> Тесты завершены. Результаты в $RAW_REPORTS_DIR"

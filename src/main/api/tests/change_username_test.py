@@ -4,7 +4,6 @@ from src.main.api.models.change_username import ChangeUsernameModel
 
 
 
-
 @pytest.mark.api
 class TestChangeUsername:
     @pytest.mark.debug
