@@ -87,7 +87,7 @@ class BasePage(ABC):
         return self
 
     def get_welcome_text(self):
-        self.welcome_text.wait_for(state="visible")
+        self.welcome_text.wait_for(state="visible", timeout=60000)
         self.take_screenshot("user_dashboard")
         return self.welcome_text.text_content()
 

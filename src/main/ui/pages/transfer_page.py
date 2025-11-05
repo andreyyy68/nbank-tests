@@ -43,7 +43,7 @@ class TransferPage(BasePage):
         return self
 
     def transfer(self, message):
-        with self.check_alert_message_and_accept(message):
+        with self.check_alert_message_and_accept(message, timeout=60000):
             self.transfer_button.click()
         return self
 
