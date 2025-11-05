@@ -44,7 +44,7 @@ class TransferPage(BasePage):
 
     def transfer(self, message):
         with self.check_alert_message_and_accept(message, timeout=60000):
-            self.transfer_button.click()
+            self.transfer_button.click(timeout=60000)
         return self
 
     def transfer_expected_error(self, message):
@@ -56,5 +56,3 @@ class TransferPage(BasePage):
         if match:
             self.transfer_amount = float(match.group(1))
         return self.transfer_amount
-
-
