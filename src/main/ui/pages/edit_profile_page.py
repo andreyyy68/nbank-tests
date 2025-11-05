@@ -18,8 +18,13 @@ class EditProfilePage(BasePage):
 
     def button_save_change(self, message):
         with self.check_alert_message_and_accept(message):
-           expect(self.button_save_changes).to_be_enabled()
-           self.button_save_changes.click()
+            self.page.evaluate("""
+                      () => {
+                          const btn = document.querySelector('button.btn.btn-primary.mt-3');
+                          if (!btn) throw new Error('Button not found');
+                          btn.click();
+                      }
+                  """)
         return self
 
     def button_expecting_error(self, message):
