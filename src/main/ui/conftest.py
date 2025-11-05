@@ -1,5 +1,5 @@
 import pytest
-from playwright.sync_api import Browser
+from playwright.sync_api import Browser, Playwright
 from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.ui.helpers.context import add_item_to_local_storage
 from src.main.classes.api_manager import ApiManager
@@ -12,6 +12,12 @@ def browser_context_args(browser_context_args):
         **browser_context_args,
         "base_url": Config.get("ui_base_url"),
     }
+
+@pytest.fixture(scope="session")
+def browser(playwright: Playwright):
+    browser = playwright.chromium.launch(headless=True)
+    yield browser
+    browser.close()
 
 @pytest.fixture
 def new_context(browser: Browser, browser_context_args):

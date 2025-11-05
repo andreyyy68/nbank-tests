@@ -9,3 +9,4 @@ class HttpRequest:
         self.endpoint = endpoint
         self.response_spec = response_spec
 
+
