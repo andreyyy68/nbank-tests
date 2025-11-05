@@ -21,11 +21,9 @@ docker run --rm \
   -e TEST_PROFILE="$TEST_PROFILE" \
   -e BACKEND_URL="http://backend:4111/api/v1" \
   -e UI_BASE_URL="http://frontend:80" \
-  -e PYTHONUNBUFFERED=1 \
-  -e PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
-  -e CI=1 \
   $IMAGE_NAME \
-  bash -c "pytest --headed=false --slowmo 0"
-
+  bash -c "\
+    pytest --headed=false --slowmo 0 \
+  "
 
 echo ">>> Тесты завершены. Результаты в $RAW_REPORTS_DIR"
