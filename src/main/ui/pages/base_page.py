@@ -98,24 +98,3 @@ class BasePage(ABC):
             attachment_type=allure.attachment_type.PNG
         )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

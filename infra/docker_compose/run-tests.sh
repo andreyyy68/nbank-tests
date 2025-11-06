@@ -28,7 +28,8 @@ docker run --rm \
   bash -c "\
     pytest --alluredir=/app/test-output/allure-results \
            --junitxml=/app/test-output/raw/results.xml \
+           -m $TEST_PROFILE \
            --tb=short
-  "
+"
 
 echo ">>> Тесты завершены"
