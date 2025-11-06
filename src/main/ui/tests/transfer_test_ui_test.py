@@ -1,7 +1,6 @@
 import pytest
 from src.main.ui.constants.alert_message import AlertMessage
 from src.main.ui.constants.defaults import DefaultValues
-from src.main.ui.helpers.api_helpers import ensure_balance
 from src.main.ui.pages.transfer_page import TransferPage
 
 
