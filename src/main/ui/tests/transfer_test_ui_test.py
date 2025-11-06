@@ -27,10 +27,10 @@ class TestTransfer:
 
     @pytest.mark.parametrize(
         argnames="amount, message",
-        argvalues=[(0, AlertMessage.ERROR_TRANSFER),
-                   (-1, AlertMessage.ERROR_TRANSFER),
-                   (10000.01, AlertMessage.ERROR_TRANSFER),
-                   (9999.99, AlertMessage.ERROR_TRANSFER),
+        argvalues=[(0, AlertMessage.TRANSFER_BELOW_MIN),
+                   (-1, AlertMessage.TRANSFER_BELOW_MIN),
+                   (10000.01, AlertMessage.TRANSFER_MORE_MAX),
+                   (9999.99, AlertMessage.TRANSFER_FAILED),
                    ]
     )
     def test_invalid_transfer(self, user_page, api_manager, user_with_two_accounts, amount, message):

@@ -21,7 +21,7 @@ def user_account(api_manager, user_request) -> UserAccount:
     account_id = api_manager.user_steps.set_user(user_request).create_account()
     return UserAccount(user=user_request, account_id=account_id.id)
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def user_with_two_accounts(api_manager, user_request) -> UserTwoAccounts:
     api_manager.user_steps.set_user(user_request)
     from_account = api_manager.user_steps.create_account()
