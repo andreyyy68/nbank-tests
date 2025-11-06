@@ -41,6 +41,7 @@ class TransferPage(BasePage):
 
         raise AssertionError("Не удалось получить баланс после 3 попыток")
 
+
     def enter_recipient_name(self, name):
         self.recipient_name.fill(name)
         self.take_screenshot("recipient_name")

@@ -12,7 +12,6 @@ class EditProfilePage(BasePage):
 
     def edit_profile_name(self, name):
         self.edit_profile.click()
-        self.edit_profile.fill("")
         self.edit_profile.type(name, delay=50)
         expect(self.button_save_changes).to_be_enabled(timeout=10000)
         return self

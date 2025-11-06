@@ -4,6 +4,7 @@ from src.main.configs.config import Config
 from typing import TypeVar, Type, List
 from contextlib import contextmanager
 import allure
+import time
 
 
 
@@ -82,14 +83,15 @@ class BasePage(ABC):
             return None
 
     def get_profile_name(self, expected_name):
-        expect.poll(
-            lambda: self.profile_name.text_content() or "",
-            timeout=5000
-        )
-        self.page.reload()
-        self.profile_name.wait_for(state="visible", timeout=60000)
-        assert self.profile_name.text_content()  == expected_name
-        return self
+        end = time.time() + 60
+        while time.time() < end:
+            self.page.reload()
+            try:
+                expect(self.profile_name).to_have_text(expected_name, timeout=5000)
+                return self
+            except:
+                continue
+        raise AssertionError(f"Text did not become '{expected_name}' within 60 seconds")
 
     def get_welcome_text(self):
         self.welcome_text.wait_for(state="attached", timeout=60000)
@@ -114,4 +116,6 @@ class BasePage(ABC):
             d.value.accept()
         except:
             pass
+        return self
+
 
