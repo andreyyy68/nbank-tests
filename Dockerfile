@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright/python:v1.47.2-jammy
+FROM mcr.microsoft.com/playwright/python:latest
 
 ARG TEST_PROFILE=ui
 ARG BACKEND_URL=http://localhost:4111
