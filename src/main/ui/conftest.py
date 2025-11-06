@@ -15,13 +15,13 @@ def browser_context_args(browser_context_args):
 
 @pytest.fixture(scope="session")
 def browser(playwright: Playwright):
-    browser = playwright.chromium.launch(headless=True)
+    browser = playwright.chromium.launch(headless=True, slow_mo=50)
     yield browser
     browser.close()
 
 @pytest.fixture
 def new_context(browser: Browser, browser_context_args):
-    context = browser.new_context(**browser_context_args)
+    context = browser.new_context(**browser_context_args, record_video_dir="test-output/videos")
     yield context
     context.close()
 
@@ -74,7 +74,7 @@ def user_page(user_session):
     page = user_session.new_page()
     yield page
     page.close()
-    
+
 
 
 
