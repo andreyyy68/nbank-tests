@@ -40,6 +40,7 @@ class TestTransfer:
          enter_recipient_account_number(f"{DefaultValues.ACC}{user_with_two_accounts.to_account_id}").
          enter_amount(amount).
          check().
+         safe_accept_existing_dialogs().
          transfer(message)
          )
 

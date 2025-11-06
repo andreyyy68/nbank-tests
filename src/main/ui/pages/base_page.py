@@ -107,3 +107,11 @@ class BasePage(ABC):
         self.page.reload()
         return self
 
+    def safe_accept_existing_dialogs(self):
+        try:
+            with self.page.expect_event("dialog", timeout=1000) as d:
+                pass
+            d.value.accept()
+        except:
+            pass
+
