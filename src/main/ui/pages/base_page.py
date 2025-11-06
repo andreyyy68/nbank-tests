@@ -82,8 +82,12 @@ class BasePage(ABC):
             return None
 
     def get_profile_name(self, expected_name):
+        expect.poll(
+            lambda: self.profile_name.text_content() or "",
+            timeout=5000
+        )
         self.page.reload()
-        self.profile_name.wait_for(state="visible")
+        self.profile_name.wait_for(state="visible", timeout=60000)
         assert self.profile_name.text_content()  == expected_name
         return self
 

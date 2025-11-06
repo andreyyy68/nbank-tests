@@ -18,24 +18,28 @@ class TransferPage(BasePage):
         return "/transfer"
 
     def select_account(self, account_id, amount, min_balance: float = 0.01):
-        option = self.choose_an_account.locator(f"option[value='{account_id}']")
-        option.wait_for(state="attached", timeout=10000)
-        text = option.inner_text()
-        match = re.search(r"Balance: \$([\d.]+)", text)
-        if match:
-            balance = float(match.group(1))
-            if balance > amount:
-                self.choose_an_account.select_option(value=str(account_id))
-                self.take_screenshot("choose_an_account")
-                return self
+        for attempt in range(3):
+            option = self.choose_an_account.locator(f"option[value='{account_id}']")
+            option.wait_for(state="attached", timeout=10000)
+            text = option.inner_text()
+            match = re.search(r"Balance: \$([\d.]+)", text)
+
+            if match:
+                balance = float(match.group(1))
+                if balance > amount:
+                    self.choose_an_account.select_option(value=str(account_id))
+                    self.take_screenshot("choose_an_account")
+                    return self
+                else:
+                    expect(option).to_have_text(re.compile(r"Balance: \$[1-9]\d*(\.\d{2})?"), timeout=30000)
+                    self.choose_an_account.select_option(value=str(account_id))
+                    self.take_screenshot("choose_an_account")
+                    return self
             else:
-                expect(option).to_have_text(re.compile(r"Balance: \$[1-9]\d*(\.\d{2})?"), timeout=30000)
-                self.choose_an_account.select_option(value=str(account_id))
-                self.take_screenshot("choose_an_account")
-                return self
-        else:
-            self.page.reload()
-        return self
+                self.page.reload()
+                self.page.wait_for_timeout(2000)
+
+        raise AssertionError("Не удалось получить баланс после 3 попыток")
 
     def enter_recipient_name(self, name):
         self.recipient_name.fill(name)
