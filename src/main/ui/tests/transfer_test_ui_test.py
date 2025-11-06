@@ -35,8 +35,8 @@ class TestTransfer:
                    ]
     )
     def test_invalid_transfer(self, user_page, api_manager, user_with_two_accounts, amount, message):
-        ensure_balance(api_manager, user_with_two_accounts.from_account_id, 4500)
         (TransferPage(user_page).open().
+         refresh().
          select_account(user_with_two_accounts.from_account_id).
          enter_recipient_name(user_with_two_accounts.user.username).
          enter_recipient_account_number(f"{DefaultValues.ACC}{user_with_two_accounts.to_account_id}").

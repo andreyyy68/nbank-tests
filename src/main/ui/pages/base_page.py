@@ -21,6 +21,7 @@ class BasePage(ABC):
         self.get_by_check = self.page.locator("#confirmCheck")
         self.profile_name = self.page.locator(".user-info .user-name")
         self.welcome_text = page.locator(".welcome-text")
+        self.edit_profile = self.page.get_by_placeholder("Enter new name")
 
         self.current_alert_message = None
         self.deposit_amount = None
@@ -98,24 +99,7 @@ class BasePage(ABC):
             attachment_type=allure.attachment_type.PNG
         )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def refresh(self):
+        self.page.reload()
+        return self
 
