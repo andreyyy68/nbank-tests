@@ -23,7 +23,11 @@ class TransferPage(BasePage):
         match = re.search(r"Balance: \$([\d.]+)", text)
         if match:
             balance = float(match.group(1))
-            if balance == amount or balance == min_balance:
+            if balance > amount:
+                self.choose_an_account.select_option(value=str(account_id))
+                self.take_screenshot("choose_an_account")
+                return self
+            elif balance >= min_balance or balance == 0:
                 self.choose_an_account.select_option(value=str(account_id))
                 self.take_screenshot("choose_an_account")
                 return self
