@@ -6,6 +6,7 @@ import pytest
 
 
 
+
 @pytest.mark.regression
 @pytest.mark.ui
 class TestDepositUser:
