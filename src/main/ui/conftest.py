@@ -90,10 +90,3 @@ def user_page(user_session):
     page = user_session.new_page()
     yield page
     page.close()
-
-
-
-
-
-
-

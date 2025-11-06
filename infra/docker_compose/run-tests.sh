@@ -23,7 +23,9 @@ docker run --rm \
   -e UI_BASE_URL="http://frontend:80" \
   $IMAGE_NAME \
   bash -c "\
-    pytest --junitxml=/app/reports/raw/results.xml --tb=short \
+    pytest --alluredir=/app/test-output/allure-results \
+       --junitxml=/app/reports/raw/results.xml \
+       --tb=short
   "
 
 echo ">>> Тесты завершены. Результаты в $RAW_REPORTS_DIR"
