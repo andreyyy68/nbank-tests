@@ -5,6 +5,7 @@ from src.main.ui.elements.user_bage_element import UserBadgeElement
 from src.main.ui.pages.base_page import BasePage
 
 
+
 class AdminPanelPage(BasePage):
     def __init__(self, page: Page):
         super().__init__(page)
