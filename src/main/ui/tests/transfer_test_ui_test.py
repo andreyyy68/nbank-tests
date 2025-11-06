@@ -10,11 +10,11 @@ class TestTransfer:
     @pytest.mark.parametrize(
         argnames="amount",
         argvalues=[(0.01),
-                  (1000)]
+                  (4999)]
         )
     def test_valid_transfer(self, user_page, api_manager, user_with_two_accounts, amount):
         transfer_page = (TransferPage(user_page).open().
-                         select_account(user_with_two_accounts.from_account_id).
+                         select_account(user_with_two_accounts.from_account_id, amount).
                          enter_recipient_name(user_with_two_accounts.user.username).
                          enter_recipient_account_number(f"{DefaultValues.ACC}{user_with_two_accounts.to_account_id}").
                          enter_amount(amount).
