@@ -12,7 +12,7 @@ class TestChangeUsername:
     @pytest.mark.parametrize("data_user",
                              [(RandomModelGenerator.generate(ChangeUsernameModel))])
     def test_valid_change_username(self, user_page, api_manager, data_user):
-        EditProfilePage(user_page).open().edit_profile_name(data_user.name).button_save_change(data_user.name.AlertMessage.NAME_UPDATE).get_profile_name(data_user.name)
+        EditProfilePage(user_page).open().edit_profile_name(data_user.name).button_save_change(data_user.name, AlertMessage.NAME_UPDATE).get_profile_name(data_user.name)
 
 
         username = api_manager.user_steps.get_changed_username()
