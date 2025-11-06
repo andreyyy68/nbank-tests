@@ -60,6 +60,14 @@ def two_user_accounts(api_manager) -> UserTwoAccounts:
         to_account_id=to_account.id,
     )
 
+@pytest.fixture
+def wait_for_balance(api_manager, two_user_accounts):
+    response = api_manager.user_steps.get_transactions(two_user_accounts.from_account_id)
+    for transactions in response:
+        if transactions.amount > 0:
+            return True
+    return False
+
 
 
 

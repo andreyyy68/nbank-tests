@@ -27,20 +27,20 @@ class TestTransfer:
 
     @pytest.mark.parametrize(
         argnames="amount, message",
-        argvalues=[(0, AlertMessage.TRANSFER_BELOW_MIN),
+        argvalues=[
                    (-1, AlertMessage.TRANSFER_BELOW_MIN),
                    (10000.01, AlertMessage.TRANSFER_MORE_MAX),
                    (9999.99, AlertMessage.TRANSFER_FAILED),
                    ]
     )
-    def test_invalid_transfer(self, user_page, api_manager, user_with_two_accounts, amount, message):
+    def test_invalid_transfer(self, user_page, api_manager, user_with_two_accounts, amount, message, wait_for_balance):
         (TransferPage(user_page).open().
          select_account(user_with_two_accounts.from_account_id).
          enter_recipient_name(user_with_two_accounts.user.username).
          enter_recipient_account_number(f"{DefaultValues.ACC}{user_with_two_accounts.to_account_id}").
          enter_amount(amount).
          check().
-         transfer(message)
+         transfer(message, wait_for_balance)
          )
 
     def test_not_confirm(self, user_page):

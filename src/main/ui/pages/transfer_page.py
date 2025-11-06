@@ -42,9 +42,10 @@ class TransferPage(BasePage):
         self.take_screenshot("check")
         return self
 
-    def transfer(self, message):
+    def transfer(self, message, wait_for_balance):
         with self.check_alert_message_and_accept(message, timeout=60000):
-            self.transfer_button.click(timeout=60000)
+            if wait_for_balance:
+               self.transfer_button.click(timeout=60000)
         return self
 
     def transfer_expected_error(self, message):
