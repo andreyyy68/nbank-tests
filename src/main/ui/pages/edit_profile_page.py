@@ -5,7 +5,7 @@ class EditProfilePage(BasePage):
     def __init__(self, page: Page):
         super().__init__(page)
         self.edit_profile = self.page.get_by_placeholder("Enter new name")
-        self.button_save_changes = self.page.get_by_role("button", name="Save Changes")
+        self.button_save_changes = self.page.get_by_role("button", name="💾 Save Changes")
 
     @property
     def url(self):

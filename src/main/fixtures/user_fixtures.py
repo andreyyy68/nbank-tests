@@ -54,19 +54,15 @@ def two_user_accounts(api_manager) -> UserTwoAccounts:
         request_balance=5000
     )
 
+    balance = api_manager.user_steps.get_account(UserTwoAccounts)
+    assert getattr(balance, "balance", 0) != 0
+
     return UserTwoAccounts(
         user=from_user_data,
         from_account_id=from_account.id,
         to_account_id=to_account.id,
     )
 
-@pytest.fixture
-def wait_for_balance(api_manager, two_user_accounts):
-    response = api_manager.user_steps.get_transactions(two_user_accounts.from_account_id)
-    for transactions in response:
-        if transactions.amount != 0:
-            return True
-    return False
 
 
 
