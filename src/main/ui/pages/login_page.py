@@ -17,5 +17,3 @@ class LoginPage(BasePage):
         self.take_screenshot("fill_username_and_password")
         self.login_button.click()
         return self
-
-
