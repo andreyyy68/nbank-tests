@@ -4,8 +4,6 @@ from src.main.api.models.create_user_request import CreateUserRequest
 from src.main.ui.helpers.context import add_item_to_local_storage
 from src.main.classes.api_manager import ApiManager
 from src.main.configs.config import Config
-import allure
-import time
 
 
 @pytest.fixture(scope="session")
@@ -25,22 +23,6 @@ def browser(playwright: Playwright):
 def new_context(browser: Browser, browser_context_args):
     context = browser.new_context(**browser_context_args, record_video_dir="test-output/videos")
     yield context
-    for idx, page in enumerate(context.pages, start=1):
-        try:
-            page.close()
-        except Exception:
-            pass
-        try:
-            video_path = page.video.path()
-            timestamp = int(time.time() * 1000)
-            allure.attach.file(
-                video_path,
-                name=f"video_{idx}_{timestamp}.webm",
-                attachment_type=allure.attachment_type.WEBM
-            )
-        except Exception:
-            pass
-
     context.close()
 
 @pytest.fixture
@@ -78,6 +60,7 @@ def user_session(new_context, user_token):
     yield new_context
 
 
+
 @pytest.fixture
 def admin_page(admin_session):
     page = admin_session.new_page()
@@ -90,3 +73,10 @@ def user_page(user_session):
     page = user_session.new_page()
     yield page
     page.close()
+
+
+
+
+
+
+

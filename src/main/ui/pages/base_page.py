@@ -21,6 +21,7 @@ class BasePage(ABC):
         self.get_by_check = self.page.locator("#confirmCheck")
         self.profile_name = self.page.locator(".user-info .user-name")
         self.welcome_text = page.locator(".welcome-text")
+        self.h1 = self.page.locator("h1")
 
         self.current_alert_message = None
         self.deposit_amount = None
@@ -87,9 +88,9 @@ class BasePage(ABC):
         return self
 
     def get_welcome_text(self):
-        self.welcome_text.wait_for(state="visible", timeout=60000)
-        self.take_screenshot("user_dashboard")
-        return self.welcome_text.text_content()
+        self.h1.wait_for(state="visible", timeout=30000)
+        text = self.h1.inner_text().strip()
+        return text if text else None
 
     def take_screenshot(self, name: str):
         allure.attach(
@@ -98,3 +99,16 @@ class BasePage(ABC):
             attachment_type=allure.attachment_type.PNG
         )
 
+    def safe_click(self, locator):
+        locator.wait_for(state="visible", timeout=10000)
+
+        locator.scroll_into_view_if_needed()
+
+        locator.wait_for(state="attached")
+
+        try:
+            locator.click(timeout=5000)
+        except Exception:
+            self.page.evaluate("el => el.click()", locator.element_handle())
+
+        self.page.wait_for_timeout(500)
