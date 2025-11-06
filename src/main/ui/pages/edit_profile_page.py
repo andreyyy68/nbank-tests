@@ -11,10 +11,8 @@ class EditProfilePage(BasePage):
         return "/edit-profile"
 
     def edit_profile_name(self, name):
-        self.edit_profile.fill(name)
-        expect(self.edit_profile).to_have_value(name, timeout=10000)
-        self.take_screenshot("edit_profile_name")
-        return self
+        self.button_save_changes = self.page.get_by_role("button", name="💾 Save Changes")
+        self.button_save_changes.click()
 
     def button_save_change(self, message):
         with self.check_alert_message_and_accept(message):

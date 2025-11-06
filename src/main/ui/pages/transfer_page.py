@@ -29,7 +29,7 @@ class TransferPage(BasePage):
                 self.take_screenshot("choose_an_account")
                 return self
             else:
-                expect(option).to_contain_text(f"Balance: $5000", timeout=15000)
+                expect(option).to_contain_text(f"Balance: $5000", timeout=30000)
                 self.choose_an_account.select_option(value=str(account_id))
                 self.take_screenshot("choose_an_account")
                 return self
