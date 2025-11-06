@@ -18,6 +18,7 @@ class EditProfilePage(BasePage):
 
     def button_save_change(self, message):
         with self.check_alert_message_and_accept(message):
+            self.refresh()
             self.button_save_changes.wait_for(timeout=15000)
             expect(self.button_save_changes).to_be_enabled(timeout=15000)
             self.button_save_changes.click()

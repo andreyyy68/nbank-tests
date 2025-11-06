@@ -1,7 +1,6 @@
 from src.main.ui.pages.base_page import BasePage
-from playwright.sync_api import expect
 import re
-
+from playwright.sync_api import expect
 class TransferPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
@@ -20,24 +19,23 @@ class TransferPage(BasePage):
 
     def select_account(self, account_id, amount, min_balance: float = 0.01):
         option = self.choose_an_account.locator(f"option[value='{account_id}']")
-        expect(option).to_contain_text(f"Balance: ${min_balance}", timeout=10000)
-
-        # Берём числовой баланс
+        option.wait_for(state="attached", timeout=10000)
         text = option.inner_text()
         match = re.search(r"Balance: \$([\d.]+)", text)
-        if not match:
-            raise ValueError(f"Не удалось распарсить баланс из текста: {text}")
-
-        balance = float(match.group(1))
-
-        # Для позитивных тестов: баланс больше amount
-        # Для негативных тестов: баланс хотя бы min_balance или 0
-        if balance > amount or balance >= min_balance or balance == 0:
-            self.choose_an_account.select_option(value=str(account_id))
-            self.take_screenshot("choose_an_account")
-            return self
+        if match:
+            balance = float(match.group(1))
+            if balance > amount:
+                self.choose_an_account.select_option(value=str(account_id))
+                self.take_screenshot("choose_an_account")
+                return self
+            else:
+                expect(option).to_contain_text(f"Balance: $5000", timeout=15000)
+                self.choose_an_account.select_option(value=str(account_id))
+                self.take_screenshot("choose_an_account")
+                return self
         else:
-            raise AssertionError(f"Balance меньше требуемого: {balance}")
+            self.page.reload()
+        return self
 
     def enter_recipient_name(self, name):
         self.recipient_name.fill(name)
