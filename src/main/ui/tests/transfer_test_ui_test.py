@@ -1,6 +1,7 @@
 import pytest
 from src.main.ui.constants.alert_message import AlertMessage
 from src.main.ui.constants.defaults import DefaultValues
+from src.main.ui.helpers.api_helpers import ensure_balance
 from src.main.ui.pages.transfer_page import TransferPage
 
 
@@ -34,6 +35,7 @@ class TestTransfer:
                    ]
     )
     def test_invalid_transfer(self, user_page, api_manager, user_with_two_accounts, amount, message):
+        ensure_balance(api_manager, user_with_two_accounts.from_account_id, 4500)
         (TransferPage(user_page).open().
          select_account(user_with_two_accounts.from_account_id).
          enter_recipient_name(user_with_two_accounts.user.username).
