@@ -1,6 +1,10 @@
 from src.main.ui.pages.base_page import BasePage
 import re
 from playwright.sync_api import expect
+import time
+
+
+
 class TransferPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
@@ -18,28 +22,33 @@ class TransferPage(BasePage):
         return "/transfer"
 
     def select_account(self, account_id, amount, min_balance: float = 0.01):
-        for attempt in range(3):
-            option = self.choose_an_account.locator(f"option[value='{account_id}']")
-            option.wait_for(state="attached", timeout=10000)
-            text = option.inner_text()
-            match = re.search(r"Balance: \$([\d.]+)", text)
+        option_selector = f"option[value='{account_id}']"
 
-            if match:
-                balance = float(match.group(1))
-                if balance > amount:
-                    self.choose_an_account.select_option(value=str(account_id))
-                    self.take_screenshot("choose_an_account")
-                    return self
-                else:
-                    expect(option).to_have_text(re.compile(r"Balance: \$[1-9]\d*(\.\d{2})?"), timeout=30000)
-                    self.choose_an_account.select_option(value=str(account_id))
-                    self.take_screenshot("choose_an_account")
-                    return self
-            else:
-                self.page.reload()
-                self.page.wait_for_timeout(2000)
+        for attempt in range(1, 5):
+            if attempt > 1:
+                self.page.reload(wait_until="networkidle")
 
-        raise AssertionError("Не удалось получить баланс после 3 попыток")
+            try:
+                option = self.choose_an_account.locator(option_selector)
+                option.wait_for(state="attached", timeout=5000)
+
+                text = option.inner_text()
+                match = re.search(r"Balance: \$([\d.]+)", text)
+
+                if match:
+                    balance = float(match.group(1))
+                    if balance >= min_balance:
+                         self.choose_an_account.select_option(value=str(account_id))
+                         self.take_screenshot("choose_an_account")
+                         return self
+                    elif attempt == 4:
+                       raise AssertionError(
+                    f"Insufficient balance: ${balance} < ${amount}"
+                    )
+            except TimeoutError:
+                if attempt == 4:
+                    raise AssertionError(f"Account {account_id} not found")
+            return self
 
 
     def enter_recipient_name(self, name):

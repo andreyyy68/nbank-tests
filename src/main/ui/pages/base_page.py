@@ -83,15 +83,26 @@ class BasePage(ABC):
             return None
 
     def get_profile_name(self, expected_name):
-        end = time.time() + 60
-        while time.time() < end:
-            self.page.reload()
+        try:
+            expect(self.profile_name).to_have_text(expected_name, timeout=3000)
+            return self
+        except AssertionError:
+            pass
+
+        for attempt in range(1, 4):
+            self.page.reload(wait_until="networkidle", timeout=30000)
+            self.profile_name.wait_for(state="visible", timeout=5000)
+
             try:
-                expect(self.profile_name).to_have_text(expected_name, timeout=5000)
+                expect(self.profile_name).to_have_text(expected_name, timeout=3000)
                 return self
-            except:
-                continue
-        raise AssertionError(f"Text did not become '{expected_name}' within 60 seconds")
+            except AssertionError:
+                if attempt == 3:
+                    actual = self.profile_name.text_content()
+                    self.page.screenshot(path="/app/test-output/profile-error.png")
+                    raise AssertionError(
+                        f"Expected '{expected_name}', got '{actual}' after 3 retries"
+                    )
 
     def get_welcome_text(self):
         self.welcome_text.wait_for(state="attached", timeout=60000)
