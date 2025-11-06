@@ -21,7 +21,7 @@ def browser(playwright: Playwright):
 
 @pytest.fixture
 def new_context(browser: Browser, browser_context_args):
-    context = browser.new_context(**browser_context_args, record_video_dir="test-output/videos")
+    context = browser.new_context(**browser_context_args)
     yield context
     context.close()
 
@@ -58,7 +58,6 @@ def user_session(new_context, user_token):
         item_value=user_token,
     )
     yield new_context
-
 
 
 @pytest.fixture
