@@ -43,8 +43,8 @@ class BasePage(ABC):
         return [page_element_class(locator) for locator in locator.all()]
 
     @contextmanager
-    def check_alert_message_and_accept(self, expected_message: str):
-        with self.page.expect_event("dialog") as dialog:
+    def check_alert_message_and_accept(self, expected_message: str, timeout=30000):
+        with self.page.expect_event("dialog", timeout=timeout) as dialog:
             yield
             self.current_alert_message = dialog.value.message
             allure.attach(
