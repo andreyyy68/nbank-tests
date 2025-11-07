@@ -27,7 +27,7 @@ class TransferPage(BasePage):
     def enter_recipient_name(self, name):
         self.recipient_name.click()
         self.recipient_name.type(name, delay=50)
-        expect(self.transfer_button).to_be_enabled(timeout=10000)
+        expect(self.transfer_button).to_be_enabled()
         self.take_screenshot("recipient_name")
         return self
 
@@ -53,8 +53,8 @@ class TransferPage(BasePage):
             self.transfer_button.click()
             return self
 
-    def transfer_invalid_button(self, message, timeout=15000):
-        with self.page.expect_event("dialog", timeout=timeout) as dialog:
+    def transfer_invalid_button(self, message):
+        with self.page.expect_event("dialog") as dialog:
             yield
         self.current_alert_message = dialog.value.message
 

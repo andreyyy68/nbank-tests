@@ -83,14 +83,14 @@ class BasePage(ABC):
 
     def get_profile_name(self, expected_name):
         try:
-            expect(self.profile_name).to_have_text(expected_name, timeout=3000)
+            expect(self.profile_name).to_have_text(expected_name)
             return self
         except AssertionError:
             pass
 
         for attempt in range(1, 4):
-            self.page.reload(wait_until="networkidle", timeout=30000)
-            self.profile_name.wait_for(state="visible", timeout=5000)
+            self.page.reload(wait_until="networkidle")
+            self.profile_name.wait_for(state="visible")
 
             try:
                 text = self.profile_name.text_content()
@@ -122,7 +122,7 @@ class BasePage(ABC):
 
     def safe_accept_existing_dialogs(self):
         try:
-            with self.page.expect_event("dialog", timeout=1000) as d:
+            with self.page.expect_event("dialog") as d:
                 pass
             d.value.accept()
         except:

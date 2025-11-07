@@ -13,12 +13,12 @@ class EditProfilePage(BasePage):
     def edit_profile_name(self, name):
         self.edit_profile.click()
         self.edit_profile.type(name, delay=50)
-        expect(self.button_save_changes).to_be_enabled(timeout=10000)
+        expect(self.button_save_changes).to_be_enabled()
         return self
 
     def button_save_change(self, message):
         with self.check_alert_message_and_accept(message):
-            expect(self.button_save_changes).to_be_enabled(timeout=15000)
+            expect(self.button_save_changes).to_be_enabled()
             self.button_save_changes.click()
         return self
 
