@@ -50,7 +50,7 @@ class TransferPage(BasePage):
 
     def transfer(self, message):
         with self.check_alert_message_and_accept(message):
-            self.transfer_again_button.click()
+            self.transfer_button.click()
             return self
 
     def transfer_invalid_button(self, message, timeout=15000):
