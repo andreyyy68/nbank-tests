@@ -21,35 +21,29 @@ class TransferPage(BasePage):
     def url(self):
         return "/transfer"
 
-    def select_account(self, account_id, amount, min_balance: float = 0.01):
+    def select_account(self, account_id, amount):
         option_selector = f"option[value='{account_id}']"
-
         for attempt in range(1, 5):
             if attempt > 1:
                 self.page.reload(wait_until="networkidle")
-
             try:
                 option = self.choose_an_account.locator(option_selector)
-                option.wait_for(state="attached", timeout=5000)
-
-                text = option.inner_text()
+                text = option.text_content()
                 match = re.search(r"Balance: \$([\d.]+)", text)
+                if not match:
+                    raise ValueError(f"Не удалось извлечь баланс из {text}")
 
-                if match:
-                    balance = float(match.group(1))
-                    if balance >= min_balance:
-                         self.choose_an_account.select_option(value=str(account_id))
-                         self.take_screenshot("choose_an_account")
-                         return self
-                    elif attempt == 4:
-                       raise AssertionError(
-                    f"Insufficient balance: ${balance} < ${amount}"
-                    )
-            except TimeoutError:
-                if attempt == 4:
-                    raise AssertionError(f"Account {account_id} not found")
-            return self
+                balance = float(match.group(1))
+                if balance >= amount:
+                  self.choose_an_account.select_option(value=str(account_id))
+                  self.take_screenshot("choose_an_account")
+                else:
+                    self.page.reload()
+                    self.choose_an_account.wait_for(state="attached")
+            except AssertionError:
+                raise f"Баланс не изменился"
 
+        return self
 
     def enter_recipient_name(self, name):
         self.recipient_name.fill(name)
@@ -72,8 +66,13 @@ class TransferPage(BasePage):
         return self
 
     def transfer(self, message):
+        self.page.wait_for_load_state("networkidle")
+        expect(self.transfer_button).to_be_enabled(timeout=10000)
+        self.page.wait_for_timeout(1500)
+
         with self.check_alert_message_and_accept(message, timeout=60000):
-            self.transfer_button.click(timeout=60000)
+            self.transfer_button.click(force=True)
+            self.page.wait_for_timeout(2000)
         return self
 
     def transfer_expected_error(self, message):
