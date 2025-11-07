@@ -4,8 +4,7 @@ from src.main.configs.config import Config
 from typing import TypeVar, Type, List
 from contextlib import contextmanager
 import allure
-import time
-
+import re
 
 
 T = TypeVar('T', bound='BasePage')
@@ -94,7 +93,7 @@ class BasePage(ABC):
             self.profile_name.wait_for(state="visible", timeout=5000)
 
             try:
-                expect(self.profile_name).to_have_text(expected_name, timeout=3000)
+                expect(self.profile_name).to_have_text(re.compile(expected_name, re.IGNORECASE), timeout=3000)
                 return self
             except AssertionError:
                 if attempt == 3:

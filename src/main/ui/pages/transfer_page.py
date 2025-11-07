@@ -21,7 +21,7 @@ class TransferPage(BasePage):
     def url(self):
         return "/transfer"
 
-    def select_account(self, api_manager, user_id, amount):
+    def select_account(self, user_id, amount, api_manager):
         accounts = api_manager.user_steps.set_user.get_transactions(user_id)
 
         suitable_account = None
