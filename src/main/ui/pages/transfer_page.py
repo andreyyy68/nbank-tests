@@ -26,7 +26,6 @@ class TransferPage(BasePage):
 
         option = self.choose_an_account.locator(f"option[value='{account_id}']")
         option.wait_for(state="attached", timeout=timeout)
-        option.wait_for(state="visible", timeout=timeout)
 
         self.choose_an_account.select_option(value=str(account_id))
         expect(self.choose_an_account).to_have_value(str(account_id), timeout=timeout)
