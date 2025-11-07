@@ -21,9 +21,22 @@ class TransferPage(BasePage):
     def url(self):
         return "/transfer"
 
-    def select_account(self, account_id):
-        self.choose_an_account.select_option(value=str(account_id))
-        expect(self.choose_an_account).to_have_value(str(account_id), timeout=3000)
+    def select_account(self, api_manager, user_id, amount):
+        accounts = api_manager.user_steps.set_user.get_transactions(user_id)
+
+        suitable_account = None
+        for acc in accounts:
+            if acc['balance'] >= amount:
+                suitable_account = acc
+                break
+
+        if not suitable_account:
+            raise ValueError(f"Нет аккаунта с балансом >= {amount}")
+
+        self.choose_an_account.select_option(value=str(suitable_account['id']))
+        expect(self.choose_an_account).to_have_value(str(suitable_account['id']), timeout=5000)
+        self.take_screenshot("choose_account")
+
         return self
 
     def enter_recipient_name(self, name):
