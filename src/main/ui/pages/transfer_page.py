@@ -23,6 +23,7 @@ class TransferPage(BasePage):
     def select_account(self, account_id, timeout=5000):
         self.choose_an_account.wait_for(state="attached", timeout=timeout)
         self.choose_an_account.wait_for(state="visible", timeout=timeout)
+        self.choose_an_account.locator(f"option[value='{account_id}']").wait_for(state="attached", timeout=timeout)
 
         option = self.choose_an_account.locator(f"option[value='{account_id}']")
         option.wait_for(state="attached", timeout=timeout)
