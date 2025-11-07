@@ -35,7 +35,7 @@ class TestTransfer:
     )
     def test_invalid_transfer(self, user_page, api_manager, user_with_two_accounts, amount, message):
         (TransferPage(user_page).open().
-         select_account(user_with_two_accounts.from_account_id).
+         select_account(user_with_two_accounts.from_account_id, amount).
          enter_recipient_name(user_with_two_accounts.user.username).
          enter_recipient_account_number(f"{DefaultValues.ACC}{user_with_two_accounts.to_account_id}").
          enter_amount(amount).
