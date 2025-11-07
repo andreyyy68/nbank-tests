@@ -4,7 +4,6 @@ from src.main.api.requests.skeleton.requesters.crud_requester import CrudRequest
 from src.main.api.requests.skeleton.endpoint import Endpoint
 from src.main.api.specs.response_specs import ResponseSpec
 
-BASE_URL = 'http://localhost:4111/api/v1'
 class RequestSpec:
     @staticmethod
     def default_req_headers():

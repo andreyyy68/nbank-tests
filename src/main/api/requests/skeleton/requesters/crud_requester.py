@@ -5,6 +5,7 @@ from src.main.api.requests.skeleton.http_request import HttpRequest
 from src.main.api.requests.skeleton.interface.crud_end_interface import CrudEndpointInterface
 from src.main.api.models.base_model import BaseModel
 from src.main.api.requests.utils.url_builder import UrlBuilder
+import allure
 
 
 
@@ -12,18 +13,19 @@ T = TypeVar("T", bound=BaseModel | RootModel)
 
 class CrudRequester(HttpRequest, CrudEndpointInterface, Generic[T]):
     def _request(self, method: str, model: Optional[T] = None, **params) -> requests.Response:
-        url, query_params = UrlBuilder(self.endpoint.value.url).build(**params)
-        body = model.model_dump() if model else None
+        with allure.step(f"{method} {self.endpoint.value.url}"):
+            url, query_params = UrlBuilder(self.endpoint.value.url).build(**params)
+            body = model.model_dump() if model else None
+            response = requests.request(
+                method=method,
+                url=url,
+                headers=self.request_spec,
+                json=body,
+                params=query_params
+            )
+            self.response_spec(response)
+            return response
 
-        response = requests.request(
-            method=method,
-            url=url,
-            headers=self.request_spec,
-            json=body,
-            params=query_params
-        )
-        self.response_spec(response)
-        return response
 
     def post(self, model: Optional[T] = None, **params) -> requests.Response:
         return self._request("POST", model, **params)

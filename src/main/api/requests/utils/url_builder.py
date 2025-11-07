@@ -1,6 +1,6 @@
 import re
 from typing import Tuple, Dict
-from src.main.api.configs.config import Config
+from src.main.configs.config import Config
 
 
 class UrlBuilder:
