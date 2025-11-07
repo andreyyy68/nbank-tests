@@ -21,14 +21,20 @@ class TransferPage(BasePage):
         return "/transfer"
 
     def select_account(self, account_id, timeout=5000):
-        self.choose_an_account.wait_for(state="attached", timeout=timeout)
         self.choose_an_account.wait_for(state="visible", timeout=timeout)
-        self.choose_an_account.locator(f"option[value='{account_id}']").wait_for(state="attached", timeout=timeout)
 
-        option = self.choose_an_account.locator(f"option[value='{account_id}']")
-        option.wait_for(state="attached", timeout=timeout)
+        self.page.wait_for_function(
+            """() => {
+                const select = document.querySelector('.account-selector');
+                return select && select.options.length > 1;
+            }""",
+            timeout=timeout
+        )
+
+        self.page.wait_for_timeout(500)
 
         self.choose_an_account.select_option(value=str(account_id))
+
         expect(self.choose_an_account).to_have_value(str(account_id), timeout=timeout)
 
         self.take_screenshot("choose_account")
@@ -63,7 +69,7 @@ class TransferPage(BasePage):
         expect(self.transfer_button).to_be_enabled(timeout=10000)
         self.page.wait_for_timeout(1500)
 
-        with self.check_alert_message_and_accept(message, timeout=60000):
+        with self.check_alert_message_and_accept(message):
             self.transfer_button.click(force=True)
             self.page.wait_for_timeout(2000)
         return self
