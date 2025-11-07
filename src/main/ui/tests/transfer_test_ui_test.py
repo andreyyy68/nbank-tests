@@ -34,19 +34,13 @@ class TestTransfer:
                    ]
     )
     def test_invalid_transfer(self, user_page, api_manager, user_with_two_accounts, amount, message):
-        print(f"DEBUG: Testing amount={amount}, expecting: '{message}'")
-
-        from_account_balance = api_manager.user_steps.get_transactions(user_with_two_accounts.from_account_id)
-        to_account_balance = api_manager.user_steps.get_transactions(user_with_two_accounts.to_account_id)
-        print(f"DEBUG: From account balance: {from_account_balance}")
-        print(f"DEBUG: To account balance: {to_account_balance}")
-
         (TransferPage(user_page).open().
          select_account(user_with_two_accounts.from_account_id).
          enter_recipient_name(user_with_two_accounts.user.username).
          enter_recipient_account_number(f"{DefaultValues.ACC}{user_with_two_accounts.to_account_id}").
          enter_amount(amount).
          check().
+         safe_accept_existing_dialogs().
          transfer(message)
          )
 

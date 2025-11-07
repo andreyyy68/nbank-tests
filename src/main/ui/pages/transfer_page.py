@@ -50,8 +50,8 @@ class TransferPage(BasePage):
 
     def transfer(self, message):
         with self.check_alert_message_and_accept(message):
-            self.transfer_button.click(force=True)
             self.page.wait_for_timeout(2000)
+            self.transfer_button.click(force=True)
         return self
 
     def transfer_expected_error(self, message):
