@@ -48,7 +48,12 @@ class TransferPage(BasePage):
         self.take_screenshot("check")
         return self
 
-    def transfer(self, message, timeout=15000):
+    def transfer(self, message):
+        with self.check_alert_message_and_accept(message):
+            self.transfer_again_button.click()
+            return self
+
+    def transfer_invalid_button(self, message, timeout=15000):
         with self.page.expect_event("dialog", timeout=timeout) as dialog:
             yield
         self.current_alert_message = dialog.value.message

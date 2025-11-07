@@ -41,7 +41,7 @@ class TestTransfer:
          enter_amount(amount).
          check().
          safe_accept_existing_dialogs().
-         transfer(message)
+         transfer_invalid_button(message)
          )
 
     def test_not_confirm(self, user_page):
