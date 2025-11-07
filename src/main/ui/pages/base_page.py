@@ -93,7 +93,8 @@ class BasePage(ABC):
             self.profile_name.wait_for(state="visible", timeout=5000)
 
             try:
-                expect(self.profile_name).to_have_text(re.compile(expected_name, re.IGNORECASE), timeout=3000)
+                text = self.profile_name.text_content()
+                assert expected_name.lower() in text.lower()
                 return self
             except AssertionError:
                 if attempt == 3:

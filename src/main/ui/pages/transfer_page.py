@@ -21,7 +21,8 @@ class TransferPage(BasePage):
         return "/transfer"
 
     def select_account(self, account_id):
-        self.choose_an_account.select_account(value=str(account_id))
+        self.choose_an_account.select_option(value=str(account_id))
+        expect(self.choose_an_account).to_have_value(str(account_id), timeout=5000)
         return self
 
     def enter_recipient_name(self, name):
