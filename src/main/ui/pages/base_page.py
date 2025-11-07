@@ -4,7 +4,7 @@ from src.main.configs.config import Config
 from typing import TypeVar, Type, List
 from contextlib import contextmanager
 import allure
-import re
+import time
 
 
 T = TypeVar('T', bound='BasePage')
@@ -31,9 +31,10 @@ class BasePage(ABC):
     @abstractmethod
     def url(self):...
 
-    def open(self):
+    def open(self, timeout=30000):
         full_url = f'{self.base_url}{self.url}'
-        self.page.goto(full_url)
+        self.page.goto(full_url, wait_until="load", timeout=timeout)
+        self.page.wait_for_load_state("networkidle", timeout=timeout)
         return self
 
     def get_page(self, page_class: Type[T]) -> T:
