@@ -55,7 +55,8 @@ class TransferPage(BasePage):
 
     def transfer_invalid_button(self, message, timeout=15000):
         with self.page.expect_event("dialog", timeout=timeout) as dialog:
-           self.current_alert_message = dialog.value.message
+            yield
+        self.current_alert_message = dialog.value.message
 
         assert message in self.current_alert_message, f"Incorrect error message: {self.current_alert_message}"
         dialog.value.accept()
