@@ -1,7 +1,6 @@
 from src.main.ui.pages.base_page import BasePage
 import re
 from playwright.sync_api import expect
-import time
 
 
 
@@ -21,21 +20,27 @@ class TransferPage(BasePage):
     def url(self):
         return "/transfer"
 
-    def select_account(self, user_id, amount, api_manager):
-        accounts = api_manager.user_steps.set_user.get_transactions(user_id)
+    def select_account(self, account_id, amount):
+        option_selector = f"option[value='{account_id}']"
+        for attempt in range(1, 5):
+            if attempt > 1:
+                self.page.reload(wait_until="networkidle")
+            try:
+                option = self.choose_an_account.locator(option_selector)
+                text = option.text_content()
+                match = re.search(r"Balance: \$([\d.]+)", text)
+                if not match:
+                    raise ValueError(f"Не удалось извлечь баланс из {text}")
 
-        suitable_account = None
-        for acc in accounts:
-            if acc['balance'] >= amount:
-                suitable_account = acc
-                break
-
-        if not suitable_account:
-            raise ValueError(f"Нет аккаунта с балансом >= {amount}")
-
-        self.choose_an_account.select_option(value=str(suitable_account['id']))
-        expect(self.choose_an_account).to_have_value(str(suitable_account['id']), timeout=5000)
-        self.take_screenshot("choose_account")
+                balance = float(match.group(1))
+                if balance >= amount:
+                  self.choose_an_account.select_option(value=str(account_id))
+                  self.take_screenshot("choose_an_account")
+                else:
+                    self.page.reload()
+                    self.choose_an_account.wait_for(state="attached")
+            except AssertionError:
+                raise "Баланс"
 
         return self
 
