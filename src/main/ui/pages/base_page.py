@@ -4,7 +4,7 @@ from src.main.configs.config import Config
 from typing import TypeVar, Type, List
 from contextlib import contextmanager
 import allure
-import time
+
 
 
 T = TypeVar('T', bound='BasePage')
