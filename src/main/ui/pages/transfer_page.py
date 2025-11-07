@@ -21,17 +21,8 @@ class TransferPage(BasePage):
         return "/transfer"
 
     def select_account(self, account_id, timeout=5000):
+        self.choose_an_account.wait_for(state="attached", timeout=timeout)
         self.choose_an_account.wait_for(state="visible", timeout=timeout)
-
-        self.page.wait_for_function(
-            """() => {
-                const select = document.querySelector('.account-selector');
-                return select && select.options.length > 1;
-            }""",
-            timeout=timeout
-        )
-
-        self.page.wait_for_timeout(500)
 
         self.choose_an_account.select_option(value=str(account_id))
 

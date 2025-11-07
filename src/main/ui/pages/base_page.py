@@ -31,10 +31,10 @@ class BasePage(ABC):
     @abstractmethod
     def url(self):...
 
-    def open(self, timeout=30000):
+    def open(self):
+        time.sleep()
         full_url = f'{self.base_url}{self.url}'
-        self.page.goto(full_url, wait_until="load", timeout=timeout)
-        self.page.wait_for_load_state("networkidle", timeout=timeout)
+        self.page.goto(full_url)
         return self
 
     def get_page(self, page_class: Type[T]) -> T:
