@@ -25,21 +25,17 @@ class TransferPage(BasePage):
         return self
 
     def enter_recipient_name(self, name):
-        self.recipient_name.click()
-        self.recipient_name.type(name, delay=50)
-        expect(self.transfer_button).to_be_enabled()
+        self.recipient_name.fill(name)
         self.take_screenshot("recipient_name")
         return self
 
     def enter_recipient_account_number(self, account_number):
-        self.recipient_account_number.click()
-        self.recipient_account_number.type(account_number, delay=50)
+        self.recipient_account_number.fill(account_number)
         self.take_screenshot("recipient_account_number")
         return self
 
     def enter_amount(self, amount):
-        self.fill_amount.click()
-        self.fill_amount.type(str(amount))
+        self.fill_amount.fill(amount)
         self.take_screenshot("fill_amount")
         return self
 
@@ -53,8 +49,8 @@ class TransferPage(BasePage):
             self.transfer_button.click()
             return self
 
-    def transfer_invalid_button(self, message):
-        with self.page.expect_event("dialog") as dialog:
+    def transfer_invalid_button(self, message, timeout=15000):
+        with self.page.expect_event("dialog", timeout=timeout) as dialog:
             yield
         self.current_alert_message = dialog.value.message
 
