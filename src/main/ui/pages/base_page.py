@@ -32,7 +32,6 @@ class BasePage(ABC):
     def url(self):...
 
     def open(self):
-        time.sleep()
         full_url = f'{self.base_url}{self.url}'
         self.page.goto(full_url)
         return self
