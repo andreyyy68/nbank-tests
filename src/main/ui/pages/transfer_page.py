@@ -20,25 +20,9 @@ class TransferPage(BasePage):
     def url(self):
         return "/transfer"
 
-    def select_account(self, account_id, timeout=5000):
-        try:
-            self.choose_an_account.select_option(value=str(account_id))
-        except ValueError:
-            pass
-
-        for i in range(1, 5):
-                self.page.reload(wait_until="networkidle", timeout=30000)
-                self.choose_an_account.wait_for(state="attached", timeout=timeout)
-                self.choose_an_account.wait_for(state="visible", timeout=timeout)
-                try:
-                    self.choose_an_account.select_option(value=str(account_id))
-                    return self
-                except AssertionError:
-                    if i == 4:
-                        self.choose_an_account.select_option(value=str(account_id))
-                        raise Exception("The account did not appear")
+    def select_account(self, account_id):
+        self.choose_an_account.select_option(value=str(account_id))
         return self
-
 
     def enter_recipient_name(self, name):
         self.recipient_name.click()
@@ -65,10 +49,6 @@ class TransferPage(BasePage):
         return self
 
     def transfer(self, message):
-        self.page.wait_for_load_state("networkidle")
-        expect(self.transfer_button).to_be_enabled(timeout=10000)
-        self.page.wait_for_timeout(1500)
-
         with self.check_alert_message_and_accept(message):
             self.transfer_button.click(force=True)
             self.page.wait_for_timeout(2000)
