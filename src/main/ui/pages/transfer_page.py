@@ -35,7 +35,7 @@ class TransferPage(BasePage):
         return self
 
     def enter_amount(self, amount):
-        self.fill_amount.fill(amount)
+        self.fill_amount.fill(str(amount))
         self.take_screenshot("fill_amount")
         return self
 
